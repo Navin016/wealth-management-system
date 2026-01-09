@@ -1,0 +1,127 @@
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #0f2a44, #123c63);
+  padding: 14px 40px;
+  color: white;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 51px;
+  height: auto;
+  
+ 
+}
+
+.navbar-right {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #e0e0e0;
+  font-weight: 500;
+  padding-bottom: 4px;
+  transition: all 0.3s ease;
+}
+
+/* hover */
+.nav-link:hover {
+  color: #ffffff;
+}
+
+/* ACTIVE PAGE */
+.nav-link.active {
+  color: #4ade80;
+  border-bottom: 2px solid #4ade80;
+}
+
+/* Register button */
+.register-btn {
+  background: #22c55e;
+  color: #0f2a44;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.register-btn.active {
+  background: #16a34a;
+  color: white;
+}
+
+
+@keyframes glitter {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 300%;
+  }
+}
+.sparkle-logo {
+  position: relative;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8));
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0% {
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.9));
+  }
+  100% {
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.5));
+  }
+}
+/* App name base style */
+.app-name {
+  position: relative;
+  font-size: 22px;
+  font-weight: 700;
+  color: #e5e7eb; /* fixed light text */
+  letter-spacing: 0.5px;
+  overflow: hidden;
+}
+
+/* Shine line */
+.shine-text::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(56, 189, 248, 0.8) 50%,
+    transparent 60%
+  );
+  animation: shine-sweep  7s ease-in-out  infinite;
+  animation-delay: shine-sweep10s;
+}
+
+/* Sharp sweep animation */
+@keyframes shine-sweep {
+  0% {
+    left: -120%;
+  }
+  40% {
+    left: 120%;
+  }
+  100% {
+    left: 120%;
+  }
+}

@@ -1,0 +1,361 @@
+.home {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 16px;
+  color: #0f172a;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #475569;
+  max-width: 650px;
+  margin: 0 auto 30px;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.btn {
+  padding: 12px 26px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn.primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #1d4ed8;
+}
+
+.btn.secondary {
+  border: 2px solid #2563eb;
+  color: #2563eb;
+}
+
+.btn.secondary:hover {
+  background: #e0e7ff;
+}
+.app-container {
+  background-color: #d9d9d9;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.feature-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.feature-card {
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card {
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(56, 189, 248, 0.15),
+    transparent
+  );
+  transform: rotate(25deg);
+  transition: all 0.6s ease;
+}
+
+.feature-card:hover::before {
+  top: 100%;
+  left: 100%;
+}
+.feature-title {
+  font-size: 20px;
+  margin-bottom: 12px;
+  text-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+}
+.btn.primary:hover {
+  box-shadow: 0 0 18px rgba(37, 99, 235, 0.6);
+}
+
+.btn.secondary:hover {
+  box-shadow: 0 0 16px rgba(37, 99, 235, 0.3);
+}
+
+
+/* HOME CONTAINER */
+.home {
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 70px 20px 40px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  color: #0f172a;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #475569;
+  max-width: 650px;
+  margin: 12px auto 0;
+}
+
+/* QUOTE SECTION */
+.quote-section {
+  margin: 60px auto;
+  padding: 30px;
+  max-width: 800px;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
+  border-left: 4px solid #2563eb;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.quote-text {
+  font-size: 20px;
+  font-style: italic;
+  color: #1e293b;
+}
+
+.quote-author {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+/* NEWS SECTION */
+.news-section {
+  margin-top: 60px;
+}
+
+.news-section h2 {
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+
+.news-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.news-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 36px rgba(37, 99, 235, 0.2);
+}
+
+.news-card h4 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+.news-card span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* FEATURES */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin: 70px 0;
+}
+/* FEATURES SECTION */
+.features-section {
+  margin: 70px 0;
+  text-align: center;
+}
+
+.features-section h2 {
+  margin-bottom: 30px;
+  color: #0f172a;
+}
+
+/* Know More button */
+.know-more-container {
+  margin-top: 30px;
+}
+
+.know-more-btn {
+  background: transparent;
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.know-more-btn:hover {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.4);
+}
+/* FEATURES EXPAND */
+.features-wrapper {
+  overflow: hidden;
+  max-height: 420px;
+  transition: max-height 0.6s ease;
+}
+
+.features-wrapper.expanded {
+  max-height: 1000px;
+}
+
+/* Hide extra cards visually */
+.feature-card.extra {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.features-wrapper.expanded .feature-card.extra {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Expand toggle (NOT a button) */
+.expand-toggle {
+  margin-top: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #2563eb;
+  user-select: none;
+}
+
+.expand-toggle:hover {
+  text-decoration: underline;
+}
+
+/* Chevron animation */
+.chevron {
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.chevron.rotate {
+  transform: rotate(180deg);
+}
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* CLICKABLE SERVICE CARDS */
+.feature-card.clickable {
+  cursor: pointer;
+}
+
+.feature-card.open {
+  box-shadow: 0 18px 40px rgba(37, 99, 235, 0.25);
+}
+
+/* SERVICE DETAIL */
+.service-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.feature-card.open .service-detail {
+  max-height: 140px;
+  margin-top: 10px;
+}
+
+/* TOGGLE TEXT */
+.service-toggle {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+/* EXPAND ALL SERVICES */
+.expand-toggle {
+  margin-top: 35px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.expand-toggle:hover {
+  text-decoration: underline;
+}
+
+.chevron {
+  transition: transform 0.4s ease;
+}
+
+.chevron.rotate {
+  transform: rotate(180deg);
+}

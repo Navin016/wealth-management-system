@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: #0a2540;
+}
+
+.logo {
+  color: white;
+}
+
+.nav-links a {
+  margin-left: 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: #2ecc71;
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: white;
+}
+
+.page {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.form-page {
+  max-width: 400px;
+  margin: auto;
+}
+
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.footer {
+  text-align: center;
+  padding: 15px;
+  background: #0a2540;
+  color: white;
+}
