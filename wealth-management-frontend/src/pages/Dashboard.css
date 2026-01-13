@@ -1,0 +1,229 @@
+/* ===============================
+   Global
+================================ */
+
+body {
+  margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background-color: #f1f5f9; /* slate-100 */
+  color: #1e293b; /* slate-800 */
+}
+
+/* ===============================
+   Layout Helpers
+================================ */
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.max-w-7xl {
+  max-width: 1280px;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.p-6 {
+  padding: 24px;
+}
+
+.space-y-6 > * + * {
+  margin-top: 24px;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 16px;
+}
+
+.gap-6 {
+  gap: 24px;
+}
+
+/* ===============================
+   Typography
+================================ */
+
+.text-3xl {
+  font-size: 30px;
+}
+
+.text-xl {
+  font-size: 20px;
+}
+
+.text-lg {
+  font-size: 18px;
+}
+
+.text-sm {
+  font-size: 14px;
+}
+
+.text-xs {
+  font-size: 12px;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+/* ===============================
+   Colors
+================================ */
+
+.text-slate-800 {
+  color: #1e293b;
+}
+
+.text-slate-700 {
+  color: #334155;
+}
+
+.text-slate-600 {
+  color: #475569;
+}
+
+.text-slate-500 {
+  color: #64748b;
+}
+
+.text-green-600 {
+  color: #16a34a;
+}
+
+.bg-slate-100 {
+  background-color: #f1f5f9;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.bg-red-500 {
+  background-color: #ef4444;
+}
+
+.bg-red-600 {
+  background-color: #dc2626;
+}
+
+.bg-indigo-500 {
+  background-color: #6366f1;
+}
+
+.bg-slate-200 {
+  background-color: #e2e8f0;
+}
+
+/* ===============================
+   Cards
+================================ */
+
+.rounded-xl {
+  border-radius: 12px;
+}
+
+.rounded-lg {
+  border-radius: 8px;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.shadow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ===============================
+   Buttons
+================================ */
+
+button {
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+}
+
+button:hover {
+  opacity: 0.95;
+}
+
+.transition {
+  transition: all 0.2s ease-in-out;
+}
+
+/* ===============================
+   Grid
+================================ */
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.md\:grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.lg\:grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 1024px) {
+  .lg\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .md\:grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===============================
+   Progress Bar
+================================ */
+
+.h-2 {
+  height: 8px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* ===============================
+   Misc
+================================ */
+
+.capitalize {
+  text-transform: capitalize;
+}

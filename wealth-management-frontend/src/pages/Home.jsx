@@ -1,59 +1,51 @@
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import "./Home.css";
 
-/* Quote of the Day */
+/* Quote */
 const quoteOfTheDay = {
   text: "Do not save what is left after spending, but spend what is left after saving.",
   author: "Warren Buffett",
 };
 
-/* Trending Financial News */
+/* News */
 const trendingNews = [
-  {
-    title: "Markets rise as inflation shows signs of cooling",
-    source: "Financial Times",
-  },
-  {
-    title: "Retirement planning gains focus among young investors",
-    source: "Bloomberg",
-  },
-  {
-    title: "Tech stocks lead gains in global markets",
-    source: "Reuters",
-  },
+  { title: "Markets rise as inflation shows signs of cooling", source: "Financial Times" },
+  { title: "Retirement planning gains focus among young investors", source: "Bloomberg" },
+  { title: "Tech stocks lead gains in global markets", source: "Reuters" },
 ];
 
-/* Services */
+/* Services (WITH UNIQUE IDs) */
 const services = [
   {
+    id: 1,
     title: "🎯 Goal Tracking",
     short: "Set and achieve financial goals.",
-    detail:
-      "Create short-term and long-term goals with milestone tracking and progress visualization.",
+    detail: "Create short-term and long-term goals with milestone tracking."
   },
   {
+    id: 2,
     title: "📈 Investment Planning",
     short: "Plan and grow investments.",
-    detail:
-      "Plan investments based on your risk profile and long-term financial objectives.",
+    detail: "Personalized investment planning based on risk profile."
   },
   {
+    id: 3,
     title: "📊 Portfolio Insights",
     short: "Understand portfolio performance.",
-    detail:
-      "Real-time portfolio analysis, asset allocation, and performance metrics.",
+    detail: "Real-time portfolio analytics and performance metrics."
   },
   {
+    id: 4,
     title: "⚖️ Risk Profiling",
     short: "Balanced financial decisions.",
-    detail:
-      "Assess risk tolerance to personalize investment recommendations.",
+    detail: "Risk assessment for smarter financial planning."
   },
   {
+    id: 5,
     title: "🔐 Secure Transactions",
     short: "Safe and reliable system.",
-    detail:
-      "Enterprise-grade encryption and secure transaction handling.",
+    detail: "Enterprise-grade encryption and secure handling."
   },
 ];
 
@@ -61,12 +53,10 @@ function Home() {
   const [activeService, setActiveService] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
-  /* Scroll reveal animation */
   useEffect(() => {
     const reveal = () => {
       document.querySelectorAll(".reveal").forEach((el) => {
-        const top = el.getBoundingClientRect().top;
-        if (top < window.innerHeight - 80) {
+        if (el.getBoundingClientRect().top < window.innerHeight - 80) {
           el.classList.add("active");
         }
       });
@@ -74,13 +64,12 @@ function Home() {
 
     window.addEventListener("scroll", reveal);
     reveal();
-
     return () => window.removeEventListener("scroll", reveal);
   }, []);
 
-  /* Accordion toggle */
-  const toggleService = (index) => {
-    setActiveService((prev) => (prev === index ? null : index));
+  /* TRUE ACCORDION LOGIC */
+  const toggleService = (id) => {
+    setActiveService(prev => (prev === id ? null : id));
   };
 
   return (
@@ -89,10 +78,7 @@ function Home() {
       {/* HERO */}
       <section className="hero reveal">
         <h1>Track Your Goals. Grow Your Wealth.</h1>
-        <p>
-          Plan your financial future, manage investments, and stay informed —
-          all in one secure platform.
-        </p>
+        <p>Plan your financial future, manage investments, and stay informed.</p>
       </section>
 
       {/* QUOTE */}
@@ -105,63 +91,68 @@ function Home() {
       {/* NEWS */}
       <section className="news-section reveal">
         <h2>📈 Trending Financial News</h2>
-
         <div className="news-list">
-          {trendingNews.map((news, index) => (
-            <div className="news-card" key={index}>
-              <h4>{news.title}</h4>
-              <span>{news.source}</span>
+          {trendingNews.map((n, i) => (
+            <div className="news-card" key={i}>
+              <h4>{n.title}</h4>
+              <span>{n.source}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* SERVICES */}
+      {/* FEATURES */}
       <section className="features-section reveal">
         <h2>Our Services</h2>
 
         <div className="features">
-          {services
-            .slice(0, showAll ? services.length : 2)
-            .map((service, index) => (
-              <div
-                key={index}
-                className={`feature-card clickable ${
-                  activeService === index ? "open" : ""
-                }`}
-                onClick={() => toggleService(index)}
-              >
-                <h3>{service.title}</h3>
-                <p>{service.short}</p>
+          {services.slice(0, showAll ? services.length : 2).map((s) => {
+            const isOpen = activeService === s.id;
 
-                <div className="service-detail">
-                  <p>{service.detail}</p>
-                </div>
+            return (
+              <div
+                key={s.id}
+                className={`feature-card clickable ${isOpen ? "open" : ""}`}
+                onClick={() => toggleService(s.id)}
+              >
+                <h3>{s.title}</h3>
+                <p>{s.short}</p>
+
+                {/* SMOOTH HEIGHT ANIMATION */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      className="service-detail"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                    >
+                      <p>{s.detail}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <span className="service-toggle">
-                  {activeService === index
-                    ? "Hide details"
-                    : "View details"}
+                  {isOpen ? "Hide details" : "View details"}
                 </span>
               </div>
-            ))}
+            );
+          })}
         </div>
 
-        {/* SHOW MORE / LESS */}
+        {/* EXPAND ALL */}
         <div
           className="expand-toggle"
           onClick={() => {
             setShowAll(!showAll);
-            setActiveService(null); // close any open service
+            setActiveService(null);
           }}
         >
-          <span>
-            {showAll ? "Show fewer services" : "Explore all services"}
-          </span>
+          <span>{showAll ? "Show fewer services" : "Explore all services"}</span>
           <span className={`chevron ${showAll ? "rotate" : ""}`}>⌄</span>
         </div>
       </section>
-
     </div>
   );
 }

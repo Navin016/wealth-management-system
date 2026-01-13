@@ -45,7 +45,7 @@ class UserResponse(BaseModel):
     id: int
     name: Optional[str]
     email: EmailStr
-    risk_profile: Optional[RiskProfile]
+   #risk_profile: Optional[RiskProfile]
     kyc_status: KYCStatus
     created_at: datetime
 

@@ -5,9 +5,10 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <h2 className="app-name shine-text">Wealth Management & Goal Tracking</h2>
+        <h2 className="app-name shine-text">
+          Wealth Management & Goal Tracking
+        </h2>
         <img src="/logo.png" alt="Logo" className="logo sparkle-logo" />
-
       </div>
 
       <div className="navbar-right">

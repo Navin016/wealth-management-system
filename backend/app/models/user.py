@@ -48,8 +48,4 @@ class User(Base):
     )
 
 
-    kyc_status = Column(
-        Enum(KYCStatus),
-        default=KYCStatus.unverified,
-        nullable=False
-    )
+    
