@@ -22,8 +22,9 @@ function Register() {
        
       localStorage.setItem("token", res.data.access_token);
      
-      // ✅ redirect to home
-      navigate("/Dashboard");
+      // ✅ redirect to dashboard
+      alert("Registration successful!");
+      navigate("/dashboard");
     } catch (err) {
       alert(err.response?.data?.detail || "Registration failed");
     }
