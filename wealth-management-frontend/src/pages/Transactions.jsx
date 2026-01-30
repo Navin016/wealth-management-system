@@ -8,6 +8,8 @@ function Transactions() {
   const [showForm, setShowForm] = useState(false);
   const [mode, setMode] = useState("buy"); // "buy" | "sell"
   const [error, setError] = useState("");
+  const [entriesToShow, setEntriesToShow] = useState(10);
+  const [expandedId, setExpandedId] = useState(null);
 
   const [formData, setFormData] = useState({
     symbol: "",
@@ -58,11 +60,11 @@ function Transactions() {
         executed_at: new Date().toISOString(),
       };
 
-      const endpoint = mode === "buy" ? "/transactions/buy" : "/transactions/sell";
+      const endpoint =
+        mode === "buy" ? "/transactions/buy" : "/transactions/sell";
 
       await API.post(endpoint, body);
 
-      // reset and reload
       setFormData({
         symbol: "",
         asset_type: "stock",
@@ -77,10 +79,20 @@ function Transactions() {
     }
   };
 
+  const visibleTransactions = transactions.slice(0, entriesToShow);
+
+  const toggleExpand = (id) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  };
+
   return (
     <div className="transactions-page">
-      <div className="page-header">
-        <h1>Transactions</h1>
+      {/* HEADER ROW: title + button */}
+      <div className="transactions-header-row">
+        <div className="page-header">
+          <h1>Transactions</h1>
+        </div>
+
         <button
           className="add-btn"
           onClick={() => {
@@ -90,6 +102,23 @@ function Transactions() {
         >
           {showForm ? "Close" : "+ New Transaction"}
         </button>
+      </div>
+
+      {/* FILTER ROW BELOW BUTTON */}
+      <div className="transactions-filter-row">
+        <label className="entries-label">
+          Show
+          <select
+            value={entriesToShow}
+            onChange={(e) => setEntriesToShow(Number(e.target.value))}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+          </select>
+          entries
+        </label>
       </div>
 
       {error && <div className="error-banner">{error}</div>}
@@ -169,7 +198,10 @@ function Transactions() {
             />
 
             <div className="form-actions">
-              <button type="submit" className={mode === "buy" ? "buy-btn" : "sell-btn"}>
+              <button
+                type="submit"
+                className={mode === "buy" ? "buy-btn" : "sell-btn"}
+              >
                 {mode === "buy" ? "Submit Buy" : "Submit Sell"}
               </button>
               <button
@@ -186,30 +218,56 @@ function Transactions() {
 
       {loading ? (
         <div className="loading">Loading transactions...</div>
-      ) : transactions.length === 0 ? (
+      ) : visibleTransactions.length === 0 ? (
         <div className="empty-state">
           <h3>No transactions yet</h3>
           <p>Add a buy/sell order to get started.</p>
         </div>
       ) : (
-        <div className="transactions-grid">
-          {transactions.map((tx) => (
-            <div key={tx.id} className={`transaction-card ${tx.type}`}>
-              <div className="transaction-header">
-                <span className="symbol">{tx.symbol}</span>
-                <span className={`type ${tx.type}`}>{tx.type.toUpperCase()}</span>
-              </div>
-              <div className="transaction-details">
-                <div>Asset: {tx.asset_type || "-"}</div>
-                <div>Qty: {tx.quantity ?? "-"}</div>
-                <div>Price: {tx.price != null ? `₹${tx.price}` : "-"}</div>
-                <div>Fees: {tx.fees != null ? `₹${tx.fees}` : "-"}</div>
-                <div className="date">
-                  {tx.executed_at
-                    ? new Date(tx.executed_at).toLocaleString()
-                    : "-"}
+        <div className="transactions-list">
+          {visibleTransactions.map((tx) => (
+            <div
+              key={tx.id}
+              className={`transaction-row ${tx.type}`}
+            >
+              <div className="transaction-main">
+                <div className="tx-left">
+                  <span className="tx-type-pill">
+                    {tx.type?.toUpperCase() || "TX"}
+                  </span>
+                  <span className="tx-symbol">{tx.symbol}</span>
+                  <span className="tx-asset">{tx.asset_type || "-"}</span>
+                </div>
+
+                <div className="tx-right">
+                  <span className="tx-amount">
+                    {tx.price != null && tx.quantity != null
+                      ? `₹${(tx.price * tx.quantity).toFixed(2)}`
+                      : "-"}
+                  </span>
+                  <button
+                    className="view-more-btn"
+                    type="button"
+                    onClick={() => toggleExpand(tx.id)}
+                  >
+                    {expandedId === tx.id ? "Hide" : "View more"}
+                  </button>
                 </div>
               </div>
+
+              {expandedId === tx.id && (
+                <div className="transaction-extra">
+                  <div>Quantity: {tx.quantity ?? "-"}</div>
+                  <div>Price: {tx.price != null ? `₹${tx.price}` : "-"}</div>
+                  <div>Fees: {tx.fees != null ? `₹${tx.fees}` : "-"}</div>
+                  <div>
+                    Executed at:{" "}
+                    {tx.executed_at
+                      ? new Date(tx.executed_at).toLocaleString()
+                      : "-"}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
