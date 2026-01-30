@@ -1,189 +1,181 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../api";
-import { useNavigate } from "react-router-dom";
-
 import "./Dashboard.css";
-const Dashboard = () => {
-  const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
+function Dashboard() {
+  const [summary, setSummary] = useState({
+    totalGoals: 0,
+    activeGoals: 0,
+    completedGoals: 0,
+    totalTargetAmount: 0,
+    averageProgress: 0,
+    totalInvestmentsValue: 0,
+    totalInvestmentsCostBasis: 0,
+    holdingsCount: 0,
+  });
+
+  /* ------------------------------------
+     PROGRESS CALCULATION (SAME AS GOALS)
+  ------------------------------------ */
+  const calculateProgress = (goal) => {
+    if (
+      !goal.monthly_contribution ||
+      !goal.target_amount ||
+      !goal.created_at
+    ) {
+      return 0;
+    }
+
+    const createdDate = new Date(goal.created_at);
+    const today = new Date();
+
+    let monthsPassed =
+      (today.getFullYear() - createdDate.getFullYear()) * 12 +
+      (today.getMonth() - createdDate.getMonth());
+
+    monthsPassed = Math.max(monthsPassed, 1);
+
+    const investedAmount = goal.monthly_contribution * monthsPassed;
+
+    return Math.min(
+      (investedAmount / goal.target_amount) * 100,
+      100
+    );
+  };
+
+  /* ------------------------------------
+     FETCH USER + GOALS + INVESTMENTS
+  ------------------------------------ */
   useEffect(() => {
-    const fetchProfile = async () => {
+    const loadDashboard = async () => {
       try {
-        const res = await API.get("/auth/me");
-        setUser(res.data);
+        // 1) Current user
+        const userRes = await API.get("/auth/me");
+        const userId = userRes.data.id;
+
+        // 2) Goals for this user
+        const goalsRes = await API.get(`/goals/user/${userId}`);
+        const goals = goalsRes.data || [];
+
+        const totalGoals = goals.length;
+        const activeGoals = goals.filter((g) => g.status === "active").length;
+        const completedGoals = goals.filter((g) => g.status === "completed").length;
+
+        const totalTargetAmount = goals.reduce(
+          (sum, g) => sum + Number(g.target_amount || 0),
+          0
+        );
+
+        const totalProgress = goals.reduce(
+          (sum, g) => sum + calculateProgress(g),
+          0
+        );
+
+        const averageProgress =
+          totalGoals > 0 ? totalProgress / totalGoals : 0;
+
+        // 3) Investments
+        const invRes = await API.get("/investments/");
+        const investments = invRes.data || [];
+
+        const holdingsCount = investments.length;
+
+        const totalInvestmentsValue = investments.reduce((sum, inv) => {
+          const v =
+            parseFloat(inv.current_value) ||
+            parseFloat(inv.cost_basis) ||
+            0;
+          return sum + v;
+        }, 0);
+
+        const totalInvestmentsCostBasis = investments.reduce((sum, inv) => {
+          const c = parseFloat(inv.cost_basis) || 0;
+          return sum + c;
+        }, 0);
+
+        setSummary({
+          totalGoals,
+          activeGoals,
+          completedGoals,
+          totalTargetAmount,
+          averageProgress,
+          totalInvestmentsValue,
+          totalInvestmentsCostBasis,
+          holdingsCount,
+        });
       } catch (err) {
-        localStorage.removeItem("token");
-        navigate("/login");
-      } finally {
-        setLoading(false);
+        console.error("Dashboard load failed", err);
       }
     };
-    fetchProfile();
-  }, [navigate]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-slate-600">
-        Loading dashboard...
-      </div>
-    );
-  }
+    loadDashboard();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="dashboard-page">
+      <h1>📊 Dashboard Overview</h1>
 
-        {/* Header */}
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-800">
-              Wealth Dashboard
-            </h1>
-            <p className="text-slate-500">
-              Track your goals, portfolio & growth
-            </p>
+      <div className="dashboard-sections">
+        {/* GOALS SECTION */}
+        <div className="dashboard-section-card">
+          <div className="dashboard-section-header">
+            <h2>Goals</h2>
+            <span className="tag">Planning</span>
           </div>
+          <div className="dashboard-cards">
+            <div className="dash-card">
+              <h3>Total Goals</h3>
+              <p>{summary.totalGoals}</p>
+            </div>
 
-          <button
-            onClick={() => {
-              localStorage.removeItem("token");
-              navigate("/login");
-            }}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-        </div>
+            <div className="dash-card">
+              <h3>Active Goals</h3>
+              <p>{summary.activeGoals}</p>
+            </div>
 
-        {/* User Overview */}
-        <div className="bg-white rounded-xl shadow p-6 flex flex-col md:flex-row justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-semibold text-slate-800">
-              Welcome, {user?.name}
-            </h2>
-            <p className="text-slate-600 text-sm">
-              {user?.email}
-            </p>
-          </div>
+            <div className="dash-card">
+              <h3>Completed Goals</h3>
+              <p>{summary.completedGoals}</p>
+            </div>
 
-          <div className="flex gap-6">
-            <InfoBadge label="Risk Profile" value={user?.risk_profile} />
-            <InfoBadge label="KYC Status" value={user?.kyc_status} />
+            <div className="dash-card">
+              <h3>Total Target Amount</h3>
+              <p>₹ {summary.totalTargetAmount.toLocaleString("en-IN")}</p>
+            </div>
+
+            <div className="dash-card highlight">
+              <h3>Average Goal Progress</h3>
+              <p>{summary.averageProgress.toFixed(1)}%</p>
+            </div>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <StatCard title="Active Goals" value="3" />
-          <StatCard title="Portfolio Value" value="₹1,25,000" />
-          <StatCard title="Monthly Investment" value="₹15,000" />
-          <StatCard title="Total Returns" value="+12.4%" positive />
+        {/* INVESTMENTS SECTION */}
+        <div className="dashboard-section-card">
+          <div className="dashboard-section-header">
+            <h2>Investments</h2>
+            <span className="tag">Portfolio</span>
+          </div>
+          <div className="dashboard-cards">
+            <div className="dash-card investment">
+              <h3>Portfolio Value</h3>
+              <p>₹ {summary.totalInvestmentsValue.toLocaleString("en-IN")}</p>
+            </div>
+
+            <div className="dash-card investment">
+              <h3>Invested (Cost Basis)</h3>
+              <p>₹ {summary.totalInvestmentsCostBasis.toLocaleString("en-IN")}</p>
+            </div>
+
+            <div className="dash-card investment">
+              <h3>Holdings</h3>
+              <p>{summary.holdingsCount}</p>
+            </div>
+          </div>
         </div>
-
-        {/* Goals & Portfolio */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Goals */}
-          <Card title="Your Goals">
-            <GoalItem
-              name="Retirement"
-              progress={65}
-              target="₹50,00,000"
-            />
-            <GoalItem
-              name="Home Purchase"
-              progress={40}
-              target="₹30,00,000"
-            />
-            <GoalItem
-              name="Education"
-              progress={25}
-              target="₹15,00,000"
-            />
-          </Card>
-
-          {/* Portfolio */}
-          <Card title="Portfolio Snapshot">
-            <PortfolioRow asset="Equity" value="₹70,000" />
-            <PortfolioRow asset="Mutual Funds" value="₹40,000" />
-            <PortfolioRow asset="Cash" value="₹15,000" />
-          </Card>
-
-        </div>
-
-        {/* Recommendations */}
-      
-        <Card title="Personalized Recommendations" className="recommendation-box">
-          <p >
-            Based on your <span className="font-medium">moderate</span> risk
-            profile, consider increasing equity exposure by 5% and rebalancing
-            your mutual funds.
-          </p>
-        </Card>
-
       </div>
     </div>
   );
-};
-
-/* ---------- Reusable Components ---------- */
-
-const StatCard = ({ title, value, positive }) => (
-  <div className="bg-white rounded-xl shadow p-6">
-    <p className="text-slate-500 text-sm">{title}</p>
-    <h3
-      className={`text-2xl font-bold mt-2 ${
-        positive ? "text-green-600" : "text-slate-800"
-      }`}
-    >
-      {value}
-    </h3>
-  </div>
-);
-
-const Card = ({ title, children }) => (
-  <div className="bg-white rounded-xl shadow p-6 space-y-4">
-    <h3 className="text-lg font-semibold text-slate-800">
-      {title}
-    </h3>
-    {children}
-  </div>
-);
-
-const InfoBadge = ({ label, value }) => (
-  <div>
-    <p className="text-xs text-slate-500">{label}</p>
-    <p className="font-semibold capitalize text-slate-800">
-      {value}
-    </p>
-  </div>
-);
-
-const GoalItem = ({ name, progress, target }) => (
-  <div>
-    <div className="flex justify-between text-sm mb-1">
-      <span className="font-medium text-slate-700">{name}</span>
-      <span className="text-slate-500">{target}</span>
-    </div>
-    <div className="w-full bg-slate-200 rounded-full h-2">
-      <div
-        className="bg-indigo-500 h-2 rounded-full"
-        style={{ width: `${progress}%` }}
-      />
-    </div>
-    <p className="text-xs text-slate-500 mt-1">
-      {progress}% achieved
-    </p>
-  </div>
-);
-
-const PortfolioRow = ({ asset, value }) => (
-  <div className="flex justify-between text-slate-700">
-    <span>{asset}</span>
-    <span className="font-medium">{value}</span>
-  </div>
-);
+}
 
 export default Dashboard;

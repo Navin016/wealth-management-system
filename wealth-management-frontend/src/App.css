@@ -1,43 +1,77 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, sans-serif;
+  background-color: #f8fafc;
+}
+
+/* =========================
+   APP LAYOUT
+========================= */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* =========================
+   MAIN CONTENT
+   Sidebar width (260px) + 1cm (38px)
+========================= */
+.main-content {
+  margin-left: calc(260px + 38px);
+  padding: 24px;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  transition: margin-left 0.3s ease;
+}
+
+/* Sidebar collapsed */
+.sidebar.collapsed ~ .main-content {
+  margin-left: 80px;
+}
+
+/* =========================
+   PUBLIC PAGES
+========================= */
+.public-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.public-content {
+  flex: 1;
+  padding: 24px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  background-color: #0f2a44;
+  color: #ffffff;
   text-align: center;
+  padding: 14px;
+  font-size: 14px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
   }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-} 
-

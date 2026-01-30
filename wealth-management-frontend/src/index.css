@@ -104,3 +104,6 @@ h1, h2, h3 {
 .form-container button:hover {
   background: #1d4ed8;
 }
+.public-content {
+  padding-bottom: 70px; /* height of footer */
+}

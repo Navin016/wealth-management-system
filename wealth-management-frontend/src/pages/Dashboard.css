@@ -1,229 +1,115 @@
-/* ===============================
-   Global
-================================ */
-
-body {
-  margin: 0;
-  font-family: "Inter", Arial, sans-serif;
-  background-color: #f1f5f9; /* slate-100 */
-  color: #1e293b; /* slate-800 */
+.dashboard-page {
+  padding: 24px 20px 32px;
+  background: #f3f4f6;
 }
 
-/* ===============================
-   Layout Helpers
-================================ */
+/* PAGE TITLE */
 
-.min-h-screen {
-  min-height: 100vh;
+.dashboard-page h1 {
+  margin-bottom: 24px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0f172a;
 }
 
-.max-w-7xl {
-  max-width: 1280px;
-}
+/* LAYOUT: LEFT (Goals) + RIGHT (Investments) */
 
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.p-6 {
-  padding: 24px;
-}
-
-.space-y-6 > * + * {
-  margin-top: 24px;
-}
-
-.flex {
-  display: flex;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.gap-4 {
-  gap: 16px;
-}
-
-.gap-6 {
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.8fr);
   gap: 24px;
 }
 
-/* ===============================
-   Typography
-================================ */
+/* BIG SECTION CARD (Goals, Investments) */
 
-.text-3xl {
-  font-size: 30px;
+.dashboard-section-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 20px 20px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
 }
 
-.text-xl {
-  font-size: 20px;
+.dashboard-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
 }
 
-.text-lg {
-  font-size: 18px;
-}
-
-.text-sm {
-  font-size: 14px;
-}
-
-.text-xs {
-  font-size: 12px;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.font-semibold {
+.dashboard-section-header h2 {
+  font-size: 1rem;
   font-weight: 600;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-.font-medium {
-  font-weight: 500;
+.dashboard-section-header span.tag {
+  font-size: 0.75rem;
+  color: #6b7280;
 }
 
-/* ===============================
-   Colors
-================================ */
+/* INNER GRID FOR METRIC CARDS */
 
-.text-slate-800 {
-  color: #1e293b;
-}
-
-.text-slate-700 {
-  color: #334155;
-}
-
-.text-slate-600 {
-  color: #475569;
-}
-
-.text-slate-500 {
-  color: #64748b;
-}
-
-.text-green-600 {
-  color: #16a34a;
-}
-
-.bg-slate-100 {
-  background-color: #f1f5f9;
-}
-
-.bg-white {
-  background-color: #ffffff;
-}
-
-.bg-red-500 {
-  background-color: #ef4444;
-}
-
-.bg-red-600 {
-  background-color: #dc2626;
-}
-
-.bg-indigo-500 {
-  background-color: #6366f1;
-}
-
-.bg-slate-200 {
-  background-color: #e2e8f0;
-}
-
-/* ===============================
-   Cards
-================================ */
-
-.rounded-xl {
-  border-radius: 12px;
-}
-
-.rounded-lg {
-  border-radius: 8px;
-}
-
-.rounded-full {
-  border-radius: 9999px;
-}
-
-.shadow {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-/* ===============================
-   Buttons
-================================ */
-
-button {
-  cursor: pointer;
-  border: none;
-  font-size: 14px;
-}
-
-button:hover {
-  opacity: 0.95;
-}
-
-.transition {
-  transition: all 0.2s ease-in-out;
-}
-
-/* ===============================
-   Grid
-================================ */
-
-.grid {
+.dashboard-cards {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
 }
 
-.grid-cols-1 {
-  grid-template-columns: 1fr;
+/* SMALL METRIC CARD */
+
+.dash-card {
+  background: #f9fafb;
+  padding: 16px 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+  border-left: 4px solid transparent;
 }
 
-.md\:grid-cols-4 {
-  grid-template-columns: repeat(4, 1fr);
+.dash-card h3 {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 6px;
 }
 
-.lg\:grid-cols-2 {
-  grid-template-columns: repeat(2, 1fr);
+.dash-card p {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0f172a;
 }
+
+/* EMPHASIS VARIANTS */
+
+.dash-card.highlight {
+  border-left-color: #22c55e;
+}
+
+.dash-card.investment {
+  border-left-color: #3b82f6;
+}
+
+/* RESPONSIVE */
 
 @media (max-width: 1024px) {
-  .lg\:grid-cols-2 {
-    grid-template-columns: 1fr;
+  .dashboard-sections {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@media (max-width: 768px) {
-  .md\:grid-cols-4 {
-    grid-template-columns: 1fr;
+@media (max-width: 640px) {
+  .dashboard-page {
+    padding-inline: 16px;
   }
-}
 
-/* ===============================
-   Progress Bar
-================================ */
+  .dashboard-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
 
-.h-2 {
-  height: 8px;
-}
-
-.w-full {
-  width: 100%;
-}
-
-/* ===============================
-   Misc
-================================ */
-
-.capitalize {
-  text-transform: capitalize;
+  .dash-card p {
+    font-size: 20px;
+  }
 }

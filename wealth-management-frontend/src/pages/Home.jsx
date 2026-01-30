@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Footer from "../components/Footer";
 import "./Home.css";
 
 /* Quote */
@@ -73,6 +74,7 @@ function Home() {
   };
 
   return (
+    <>
     <div className="home">
 
       {/* HERO */}
@@ -154,6 +156,8 @@ function Home() {
         </div>
       </section>
     </div>
+       <Footer />
+      </>
   );
 }
 

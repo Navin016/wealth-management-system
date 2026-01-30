@@ -1,0 +1,96 @@
+.sidebar {
+  width: calc(260px + 38px); /* content + 1cm */
+  height: 100vh;
+  background: #0f172a;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+/* Header */
+.sidebar-header {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* User */
+.sidebar-user {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.user-img {
+  width: 38px; /* ~1cm */
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.badge {
+  background: #334155;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+.badge.kyc {
+  background: #16a34a;
+}
+
+/* Nav */
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-nav a {
+  color: #e5e7eb;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.sidebar-nav a.active,
+.sidebar-nav a:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Logout */
+.logout-btn {
+  background: #ef4444;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}

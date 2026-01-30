@@ -23,7 +23,7 @@ function Login() {
         },
       });
 
-      localStorage.setItem("token", res.data.access_token);
+       localStorage.setItem("access_token", res.data.access_token);
 
       // ✅ redirect to home
      
