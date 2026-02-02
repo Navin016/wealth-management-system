@@ -47,20 +47,18 @@ class InvestmentResponse(BaseModel):
 
 # Input schemas remain strict
 class BuyTransactionCreate(BaseModel):
-    symbol: str = Field(..., max_length=20)
+    symbol: str
     asset_type: AssetType
     quantity: Decimal = Field(..., gt=0)
-    price: Decimal = Field(..., gt=0)
     fees: Decimal = Field(0, ge=0)
-    executed_at: Optional[datetime] = None
+
 
 class SellTransactionCreate(BaseModel):
-    symbol: str = Field(..., max_length=20)
+    symbol: str
     asset_type: AssetType
     quantity: Decimal = Field(..., gt=0)
-    price: Decimal = Field(..., gt=0)
-    fees: Decimal = Field(0, reads=0)
-    executed_at: Optional[datetime] = None
+    fees: Decimal = Field(0, ge=0)
+
 
 class DividendTransactionCreate(BaseModel):
     symbol: str = Field(..., max_length=20)

@@ -20,3 +20,17 @@ class InvestmentUpdate(BaseModel):
     current_value: Optional[Decimal] = None
     last_price: Optional[Decimal] = None
     last_price_at: Optional[datetime] = None
+class InvestmentResponse(BaseModel):
+    id: int
+    symbol: str
+    units: Decimal
+    avg_buy_price: Optional[Decimal]
+    cost_basis: Decimal
+    current_value: Decimal
+    last_price: Optional[Decimal]
+
+    gain_loss: Optional[Decimal] = None
+    gain_loss_percent: Optional[Decimal] = None
+
+    class Config:
+        from_attributes = True

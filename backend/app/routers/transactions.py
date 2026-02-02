@@ -198,6 +198,7 @@ from app.schemas.transaction import (
     WithdrawalTransactionCreate,
     TransactionResponse
 )
+from app.services.price_service import PriceService
 
 
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
@@ -223,94 +224,94 @@ def get_or_create_investment(db: Session, user_id: int, symbol: str, asset_type:
         db.flush()
     return investment
 
-@router.post("/buy", response_model=TransactionResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/buy", response_model=TransactionResponse)
 def create_buy_transaction(
     transaction: BuyTransactionCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     try:
-        investment = get_or_create_investment(db, current_user.id, transaction.symbol, transaction.asset_type)
-        
-        # Calculate weighted average cost
-        total_cost = (transaction.quantity * transaction.price) + transaction.fees
-        
-        if investment.units > 0 and investment.cost_basis > 0:
-            new_total_cost = investment.cost_basis + total_cost
-            new_total_units = investment.units + transaction.quantity
-            investment.avg_buy_price = new_total_cost / new_total_units
+        price = PriceService.get_live_price(transaction.symbol)
+
+        investment = get_or_create_investment(
+            db, current_user.id, transaction.symbol, transaction.asset_type
+        )
+
+        total_cost = (transaction.quantity * price) + transaction.fees
+
+        if investment.units > 0:
+            investment.avg_buy_price = (
+                investment.cost_basis + total_cost
+            ) / (investment.units + transaction.quantity)
         else:
-            investment.avg_buy_price = transaction.price
-        
+            investment.avg_buy_price = price
+
         investment.units += transaction.quantity
         investment.cost_basis += total_cost
-        investment.last_price = transaction.price
+        investment.last_price = price
+        investment.current_value = investment.units * price
 
-        # Create transaction record
         db_transaction = Transaction(
             user_id=current_user.id,
             symbol=transaction.symbol,
             type=TransactionType.buy,
             quantity=transaction.quantity,
-            price=transaction.price,
+            price=price,
             fees=transaction.fees,
-            asset_type=transaction.asset_type,
-            executed_at=transaction.executed_at or func.now()
+            asset_type=transaction.asset_type
         )
+
         db.add(db_transaction)
         db.commit()
         db.refresh(db_transaction)
         return db_transaction
-        
+
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=400, detail=f"Buy failed: {str(e)}")
+        raise HTTPException(400, str(e))
 
-@router.post("/sell", response_model=TransactionResponse, status_code=status.HTTP_201_CREATED)
+
+@router.post("/sell", response_model=TransactionResponse)
 def create_sell_transaction(
     transaction: SellTransactionCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    try:
-        investment = get_or_create_investment(db, current_user.id, transaction.symbol, transaction.asset_type)
-        
-        if not investment.units or investment.units < transaction.quantity:
-            raise ValueError(f"Insufficient units. Available: {investment.units}, Requested: {transaction.quantity}")
-        
-        # Proportional cost basis reduction
-        if investment.units > 0:
-            cost_per_unit = investment.cost_basis / investment.units
-            cost_sold = transaction.quantity * cost_per_unit
-            
-            investment.units -= transaction.quantity
-            investment.cost_basis -= cost_sold
-            investment.last_price = transaction.price
-            
-            if investment.units <= 0:
-                investment.units = Decimal('0')
-                investment.cost_basis = Decimal('0')
-                investment.avg_buy_price = None
+    price = PriceService.get_live_price(transaction.symbol)
 
-        # Create transaction record
-        db_transaction = Transaction(
-            user_id=current_user.id,
-            symbol=transaction.symbol,
-            type=TransactionType.sell,
-            quantity=transaction.quantity,
-            price=transaction.price,
-            fees=transaction.fees,
-            asset_type=transaction.asset_type,
-            executed_at=transaction.executed_at or func.now()
-        )
-        db.add(db_transaction)
-        db.commit()
-        db.refresh(db_transaction)
-        return db_transaction
-        
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=400, detail=f"Sell failed: {str(e)}")
+    investment = get_or_create_investment(
+        db, current_user.id, transaction.symbol, transaction.asset_type
+    )
+
+    if investment.units < transaction.quantity:
+        raise HTTPException(400, "Insufficient units")
+
+    cost_per_unit = investment.cost_basis / investment.units
+    cost_sold = cost_per_unit * transaction.quantity
+
+    investment.units -= transaction.quantity
+    investment.cost_basis -= cost_sold
+    investment.last_price = price
+    investment.current_value = investment.units * price
+
+    if investment.units == 0:
+        investment.avg_buy_price = None
+
+    db_transaction = Transaction(
+        user_id=current_user.id,
+        symbol=transaction.symbol,
+        type=TransactionType.sell,
+        quantity=transaction.quantity,
+        price=price,
+        fees=transaction.fees,
+        asset_type=transaction.asset_type
+    )
+
+    db.add(db_transaction)
+    db.commit()
+    db.refresh(db_transaction)
+    return db_transaction
+
 
 @router.post("/dividend", response_model=TransactionResponse, status_code=status.HTTP_201_CREATED)
 def create_dividend_transaction(
