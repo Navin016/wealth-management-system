@@ -231,7 +231,14 @@ def create_buy_transaction(
     db: Session = Depends(get_db)
 ):
     try:
-        price = PriceService.get_live_price(transaction.symbol)
+        price, error_message = PriceService.get_live_price(transaction.symbol)
+
+        # ✅ Handle Alpha Vantage failure
+        if price is None:
+            raise HTTPException(
+                status_code=502,
+                detail=f"Alpha Vantage Error: {error_message}"
+            )
 
         investment = get_or_create_investment(
             db, current_user.id, transaction.symbol, transaction.asset_type
@@ -266,10 +273,13 @@ def create_buy_transaction(
         db.refresh(db_transaction)
         return db_transaction
 
+    except HTTPException:
+        db.rollback()
+        raise
+
     except Exception as e:
         db.rollback()
-        raise HTTPException(400, str(e))
-
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/sell", response_model=TransactionResponse)
 def create_sell_transaction(
@@ -277,62 +287,59 @@ def create_sell_transaction(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    price = PriceService.get_live_price(transaction.symbol)
+    try:
+        price, error_message = PriceService.get_live_price(transaction.symbol)
 
-    investment = get_or_create_investment(
-        db, current_user.id, transaction.symbol, transaction.asset_type
-    )
+        # ✅ Handle Alpha Vantage failure
+        if price is None:
+            raise HTTPException(
+                status_code=502,
+                detail=f"Alpha Vantage Error: {error_message}"
+            )
 
-    if investment.units < transaction.quantity:
-        raise HTTPException(400, "Insufficient units")
+        investment = get_or_create_investment(
+            db, current_user.id, transaction.symbol, transaction.asset_type
+        )
 
-    cost_per_unit = investment.cost_basis / investment.units
-    cost_sold = cost_per_unit * transaction.quantity
+        if investment.units < transaction.quantity:
+            raise HTTPException(400, "Insufficient units")
 
-    investment.units -= transaction.quantity
-    investment.cost_basis -= cost_sold
-    investment.last_price = price
-    investment.current_value = investment.units * price
+        # ✅ Safe because units > 0 guaranteed
+        cost_per_unit = investment.cost_basis / investment.units
+        cost_sold = cost_per_unit * transaction.quantity
 
-    if investment.units == 0:
-        investment.avg_buy_price = None
+        investment.units -= transaction.quantity
+        investment.cost_basis -= cost_sold
+        investment.last_price = price
+        investment.current_value = investment.units * price
 
-    db_transaction = Transaction(
-        user_id=current_user.id,
-        symbol=transaction.symbol,
-        type=TransactionType.sell,
-        quantity=transaction.quantity,
-        price=price,
-        fees=transaction.fees,
-        asset_type=transaction.asset_type
-    )
+        if investment.units == 0:
+            investment.avg_buy_price = None
 
-    db.add(db_transaction)
-    db.commit()
-    db.refresh(db_transaction)
-    return db_transaction
+        db_transaction = Transaction(
+            user_id=current_user.id,
+            symbol=transaction.symbol,
+            type=TransactionType.sell,
+            quantity=transaction.quantity,
+            price=price,
+            fees=transaction.fees,
+            asset_type=transaction.asset_type
+        )
+
+        db.add(db_transaction)
+        db.commit()
+        db.refresh(db_transaction)
+        return db_transaction
+
+    except HTTPException:
+        db.rollback()
+        raise
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/dividend", response_model=TransactionResponse, status_code=status.HTTP_201_CREATED)
-def create_dividend_transaction(
-    transaction: DividendTransactionCreate,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    db_transaction = Transaction(
-        user_id=current_user.id,
-        symbol=transaction.symbol,
-        type=TransactionType.dividend,
-        quantity=None,
-        price=None,
-        fees=Decimal('0'),
-        asset_type=transaction.asset_type,
-        executed_at=transaction.executed_at or func.now()
-    )
-    db.add(db_transaction)
-    db.commit()
-    db.refresh(db_transaction)
-    return db_transaction
 
 @router.post("/contribute", response_model=TransactionResponse, status_code=status.HTTP_201_CREATED)
 def create_contribution_transaction(

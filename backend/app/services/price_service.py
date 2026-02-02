@@ -1,78 +1,30 @@
-# # app/services/price_service.py
-# import os
-# import requests
-# from decimal import Decimal
-
-# ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
-# BASE_URL = "https://www.alphavantage.co/query"
-
-
-# class PriceService:
-#     @staticmethod
-#     def get_live_price(symbol: str) -> Decimal:
-#         params = {
-#             "function": "GLOBAL_QUOTE",
-#             "symbol": symbol,
-#             "apikey": ALPHA_VANTAGE_API_KEY
-#         }
-
-#         response = requests.get(BASE_URL, params=params, timeout=10)
-#         data = response.json()
-
-#         try:
-#             price = data["Global Quote"]["05. price"]
-#             return Decimal(price)
-#         except Exception:
-#             raise ValueError(f"Unable to fetch price for {symbol}")
-
-
-
-
-
-
-import os
-import requests
 from decimal import Decimal
-from typing import Optional
-
-ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")
-BASE_URL = "https://www.alphavantage.co/query"
-
+import requests
 
 class PriceService:
     @staticmethod
-    def get_live_price(symbol: str) -> Optional[Decimal]:
-        """
-        Fetch live stock/ETF price from Alpha Vantage.
-        Returns Decimal price or None if unavailable.
-        NEVER raises exception.
-        """
+    def get_live_price(symbol: str):
+        url = "https://www.alphavantage.co/query"
+        params = {
+            "function": "GLOBAL_QUOTE",
+            "symbol": symbol,
+            "apikey": "YOUR_API_KEY"
+        }
 
-        try:
-            response = requests.get(
-                BASE_URL,
-                params={
-                    "function": "GLOBAL_QUOTE",
-                    "symbol": symbol,
-                    "apikey": ALPHA_VANTAGE_API_KEY,
-                },
-                timeout=6,   # shorter timeout
-            )
+        response = requests.get(url, params=params)
+        data = response.json()
 
-            data = response.json()
+        # 🔴 Alpha Vantage error handling
+        if "Information" in data:
+            return None, data["Information"]
 
-            # ✅ Handle rate limit / API errors
-            if "Global Quote" not in data:
-                return None
+        if "Note" in data:
+            return None, data["Note"]
 
-            price_str = data["Global Quote"].get("05. price")
-            if not price_str:
-                return None
+        quote = data.get("Global Quote", {})
+        price_str = quote.get("05. price")
 
-            return Decimal(price_str)
+        if not price_str:
+            return None, "Price not available from Alpha Vantage"
 
-        except requests.exceptions.RequestException:
-            return None
-
-        except Exception:
-            return None
+        return Decimal(price_str), None
