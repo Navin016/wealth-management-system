@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api";
 import InvestmentCard from "../components/InvestmentCard";
+import InvestmentPieChart from "../components/InvestmentPieChart";
 import "./Investments.css";
 
 function Investments() {
@@ -33,12 +34,21 @@ function Investments() {
   };
 
   const updatePrices = async () => {
+    setError("");
     try {
-      await API.post("/investments/update-prices");
-      fetchInvestments();
-      alert("Prices updated successfully");
+      const res = await API.post("/investments/update-prices");
+      const { updated, failed, errors } = res.data;
+
+      await fetchInvestments();
+
+      if (failed > 0) {
+        setError(
+          `Prices updated: ${updated}, Failed: ${failed}. ` +
+            errors.map(e => `${e.symbol}: ${e.error}`).join(" | ")
+        );
+      }
     } catch {
-      setError("Failed to update prices");
+      setError("Failed to update prices. Server error.");
     }
   };
 
@@ -46,28 +56,78 @@ function Investments() {
 
   return (
     <div className="investments-page">
-      <div className="page-header">
-        <div>
-          <h1>Your Portfolio</h1>
-          <p className="portfolio-value">
-            ${totalValue.toLocaleString("en-IN")}
+      {/* HEADER */}
+      <div className="portfolio-header">
+        <div className="portfolio-left">
+          <h1>📊 Investments Overview</h1>
+          <p className="subtitle">
+            Track allocation, performance & growth
           </p>
         </div>
 
-        <button className="add-btn" onClick={updatePrices}>
-          🔄 Update Prices
-        </button>
+        <div className="portfolio-right">
+          <div className="portfolio-total">
+            ₹ {totalValue.toLocaleString("en-IN")}
+            <span>Total Portfolio Value</span>
+          </div>
+
+          <button className="refresh-btn" onClick={updatePrices}>
+            🔄 Refresh Prices
+          </button>
+        </div>
       </div>
 
+      {/* ERROR */}
       {error && <div className="error-banner">{error}</div>}
 
+      {/* CHARTS */}
+      {investments.length > 0 && (
+        <div className="charts-section">
+          <div className="chart-card">
+            <h3>Asset Allocation</h3>
+            <InvestmentPieChart investments={investments} />
+          </div>
+
+          <div className="chart-card stats-card">
+            <h3>Quick Stats</h3>
+
+            <div className="stat">
+              <span>Total Assets</span>
+              <strong>{investments.length}</strong>
+            </div>
+
+            <div className="stat">
+              <span>Highest Holding</span>
+              <strong>
+                ₹{" "}
+                {Math.max(
+                  ...investments.map(i => Number(i.current_value || 0))
+                ).toLocaleString("en-IN")}
+              </strong>
+            </div>
+
+            <div className="stat">
+              <span>Avg Investment</span>
+              <strong>
+                ₹{" "}
+                {(
+                  totalValue / investments.length
+                ).toLocaleString("en-IN")}
+              </strong>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* INVESTMENT LIST */}
       {investments.length === 0 ? (
         <div className="empty-state">
-          <h3>No investments yet</h3>
+          <h3>No investments found</h3>
+          <p>Add transactions to start tracking your portfolio</p>
         </div>
       ) : (
-        <div className="investments-grid">
-          {investments.map((inv) => (
+        <div className="investments-list">
+          {investments.map(inv => (
             <InvestmentCard key={inv.id} investment={inv} />
           ))}
         </div>

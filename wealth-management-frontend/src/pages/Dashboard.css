@@ -92,11 +92,12 @@
   font-size: 18px;
   font-weight: 600;
   color: #0f172a;
+  background: none;
 }
 
 /* EMPHASIS VARIANTS */
 
-.dash-card.highlight {
+.dash-card {
   border-left-color: #22c55e;
 }
 

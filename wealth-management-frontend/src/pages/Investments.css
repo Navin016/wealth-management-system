@@ -1,121 +1,169 @@
-.investments-page {
+.main-content
+{
+  background:linear-gradient(135deg, #0f172a, #020617);
+}
+.investments-page { 
+  min-height: 100vh;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1.5rem 1.25rem 2.5rem;
+  padding: 1.8rem 1.6rem 2.8rem;
+  
 }
 
 /* HEADER */
 
-.page-header {
+.portfolio-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.8rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 1.3rem 1.5rem;
-  border-radius: 16px;
-  color: white;
+  background: #020617;
+  padding: 1.6rem 1.8rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  color: #f8fafc;
 }
 
-.page-header h1 {
+.portfolio-left h1 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.7rem;
 }
 
-.portfolio-value {
-  font-size: 1.8rem;
+.subtitle {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  background: none;
+}
+
+.portfolio-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.portfolio-total {
+  font-size: 1.6rem;
   font-weight: 700;
-  color: #1f2937;
-  background: #f9fafb;
-  padding: 0.4rem 0.8rem;
-  border-radius: 999px;
+  color: #22c55e;
+  text-align: right;
+}
+
+.portfolio-total span {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.refresh-btn {
+  background: #22c55e;
+  border: none;
+  color: #022c22;
+  padding: 0.6rem 1.1rem;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.refresh-btn:hover {
+  background: #16a34a;
+}
+
+/* CHARTS */
+
+.charts-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.4rem;
+  margin-bottom: 2rem;
+}
+
+.chart-card {
+  background: #020617;
+  border-radius: 18px;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid #1e293b;
+  color: #e5e7eb;
+}
+
+.chart-card h3 {
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #94a3b8;
 }
 
 /* STATS */
 
-.investments-stats {
+.stats-card .stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed #1e293b;
+}
+
+.stats-card .stat:last-child {
+  border-bottom: none;
+}
+
+.stats-card span {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.stats-card strong {
+  font-size: 0.95rem;
+  color: #f9fafb;
+}
+
+/* LIST */
+
+.investments-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.8rem;
-}
-
-.stat-card {
-  background: white;
-  padding: 1.1rem 1.2rem;
-  border-radius: 14px;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  border-top: 3px solid #10b981;
-}
-
-.stat-number {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.2rem;
-}
-
-.stat-label {
-  color: #6b7280;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-/* GRID */
-
-.investments-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.2rem;
 }
 
 /* STATES */
 
+.loading,
 .empty-state {
   text-align: center;
-  padding: 3.5rem 1.5rem;
-  color: #6b7280;
+  padding: 3rem 1.5rem;
+  color: #64748b;
 }
 
 .error-banner {
-  background: #fee2e2;
-  color: #dc2626;
+  background: #3f1d1d;
+  color: #fca5a5;
   padding: 0.9rem;
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 1.5rem;
   border-left: 4px solid #ef4444;
   font-size: 0.9rem;
 }
 
-.loading {
-  text-align: center;
-  padding: 3.5rem 1.5rem;
-  font-size: 1rem;
-  color: #6b7280;
-}
-
 /* RESPONSIVE */
 
-@media (max-width: 768px) {
-  .page-header {
+@media (max-width: 900px) {
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.6rem;
-    text-align: left;
+    gap: 1rem;
   }
 
-  .portfolio-value {
-    font-size: 1.6rem;
+  .portfolio-right {
+    width: 100%;
+    justify-content: space-between;
   }
 }
-
-@media (max-width: 640px) {
-  .investments-page {
-    padding-inline: 1rem;
-  }
-
-  .investments-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
+.rechart-legend-wrapper .recharts-legend-item .recharts-legend-item-text {
+  
+  background: none;
+}
+.recharts-legend-item {
+  background: none;
 }

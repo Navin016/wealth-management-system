@@ -1,46 +1,53 @@
 .investment-card {
-  background: white;
-  border-radius: 14px;
-  padding: 1.1rem 1.2rem;
-  box-shadow: 0 3px 14px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border-top: 3px solid #10b981;
+  background: #020617;
+  border: 1px solid #1eea25;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border-top: 2px solid #10b981;
   position: relative;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  font-size: 1.05rem; /* 👈 global font boost */
 }
 
 .investment-card::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 10px;
-  right: 10px;
-  height: 3px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
   border-radius: 999px;
   background: linear-gradient(90deg, #10b981, #3b82f6);
 }
 
 .investment-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 
 .investment-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 
 .symbol-info h3 {
-  margin: 0 0 0.15rem 0;
-  font-size: 1.1rem;
-  color: #1f2937;
+  margin: 0;
+  font-size: 1.15rem;
+  color: #e5e7eb;
 }
 
 .asset-type {
+  margin-top: 2px;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
   font-size: 0.7rem;
@@ -48,131 +55,91 @@
   text-transform: uppercase;
 }
 
-.asset-type.stock { background: #dbeafe; color: #1e40af; }
-.asset-type.etf { background: #ecfdf5; color: #166534; }
-.asset-type.mutual_fund { background: #fef3c7; color: #92400e; }
+.asset-type.stock { background: #1e3a8a; color: #bfdbfe; }
+.asset-type.etf { background: #064e3b; color: #a7f3d0; }
+.asset-type.mutual_fund { background: #78350f; color: #fde68a; }
 
 .current-value {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: #10b981;
+  color: #22c55e;
   text-align: right;
 }
 
-/* METRICS */
+/* ================= METRICS ================= */
 
 .investment-metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 0.7rem;
-}
-
-.metric {
-  text-align: left;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.6rem;
 }
 
 .metric .label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: #94a3b8;
   margin-bottom: 0.15rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 .metric .value {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #e5e7eb;
 }
 
 .metric.price .value {
-  color: #3b82f6;
+  color: #60a5fa;
 }
 
-/* QUICK ACTIONS (smaller, subtle) */
+/* ================= GAIN / LOSS ================= */
 
-.quick-actions {
+.gain-loss {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 10px;
+
   display: flex;
+  justify-content: flex-start; /* 👈 left aligned */
   align-items: center;
-  gap: 0.7rem;
-  margin-top: 0.9rem;
-  padding-top: 0.8rem;
-  border-top: 1px solid #f3f4f6;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: all 0.18s ease;
+  gap: 8px;
+
+  font-weight: 700;
+  font-size: 1rem;
 }
 
-.investment-card:hover .quick-actions {
-  opacity: 1;
-  transform: translateY(0);
+.gain-loss.profit {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
 }
 
-.action-btn {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 0.35rem 0.8rem;
-  border-radius: 6px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
+.gain-loss.loss {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
 }
 
-.action-btn:hover {
-  background: #dc2626;
+.gain-loss .percent {
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
-.or {
-  color: #9ca3af;
-  font-size: 0.78rem;
+.gain-loss .amount {
+  font-size: 1.05rem;
 }
 
-.action-link {
-  color: #3b82f6;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.8rem;
-}
-
-.action-link:hover {
-  text-decoration: underline;
-}
-
-/* RESPONSIVE */
+/* ================= RESPONSIVE ================= */
 
 @media (max-width: 480px) {
   .investment-card {
-    padding: 1rem;
+    padding: 0.75rem;
+    font-size: 1rem;
   }
 
   .investment-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
-.gain-loss {
-  margin-top: 0.9rem;
-  padding: 0.6rem;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.95rem;
-}
 
-.gain-loss.profit {
-  background: #ecfdf5;
-  color: #166534;
-  border: 1px solid #10b981;
-}
-
-.gain-loss.loss {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #ef4444;
-}
-
-.gain-loss .percent {
-  font-size: 0.75rem;
-  font-weight: 500;
+  .current-value {
+    font-size: 1.15rem;
+  }
 }

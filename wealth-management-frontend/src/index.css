@@ -1,18 +1,10 @@
-/* html, body {
+/* RESET */
+html, body, #root {
   height: 100%;
   margin: 0;
+ background:linear-gradient(135deg, #0f172a, #020617);
 }
 
-.app-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.content {
-  flex: 1;
-} */
-/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -22,26 +14,39 @@
 /* GLOBAL */
 body {
   font-family: "Inter", "Segoe UI", sans-serif;
-  background-color: #f8fafc;
-  color: #1e293b;
+  background-color: #181819;
+  color: #e5e7eb; /* better for dark theme */
   line-height: 1.6;
 }
 
 /* ROOT LAYOUT */
 #root {
-  min-height: 100vh;
-}
-
-/* APP LAYOUT */
-.app-container {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
+/* APP CONTAINER */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* MAIN CONTENT — THIS FIXES HEIGHT ISSUE */
 .content {
-  flex: 1;
+  flex: 1;              /* takes remaining height */
+  width: 100%;
   padding: 40px 20px;
+}
+
+/* PUBLIC PAGES (login/register/home without sidebar) */
+.public-content {
+  flex: 1;
+  width: 100%;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* LINKS */
@@ -62,10 +67,10 @@ h1, h2, h3 {
   font-weight: 600;
 }
 
-/* FORMS (login/register) */
+/* FORMS */
 .form-container {
   max-width: 420px;
-  margin: 40px auto;
+  margin: auto; /* centers vertically now */
   background: white;
   padding: 30px;
   border-radius: 10px;
@@ -103,7 +108,4 @@ h1, h2, h3 {
 
 .form-container button:hover {
   background: #1d4ed8;
-}
-.public-content {
-  padding-bottom: 70px; /* height of footer */
 }

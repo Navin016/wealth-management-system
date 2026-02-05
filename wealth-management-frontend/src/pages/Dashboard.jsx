@@ -143,7 +143,7 @@ function Dashboard() {
               <p>₹ {summary.totalTargetAmount.toLocaleString("en-IN")}</p>
             </div>
 
-            <div className="dash-card highlight">
+            <div className="dash-card ">
               <h3>Average Goal Progress</h3>
               <p>{summary.averageProgress.toFixed(1)}%</p>
             </div>
