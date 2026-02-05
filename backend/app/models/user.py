@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Enum, DateTime
+from sqlalchemy import Column, Integer, String, Enum, DateTime, Numeric
 from sqlalchemy.sql import func
 from app.database import Base
 import enum
+from decimal import Decimal
 
 
 
@@ -46,6 +47,8 @@ class User(Base):
         server_default=func.now(),
         nullable=False
     )
+    wallet_balance = Column(Numeric, default=Decimal("0.00"), nullable=False)
+    
 
 
     

@@ -8,14 +8,29 @@ function Investments() {
   const [investments, setInvestments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalValue, setTotalValue] = useState(0);
+
+
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  // ---------------- FETCH ON LOAD ----------------
   useEffect(() => {
     fetchInvestments();
   }, []);
 
+  // ---------------- AUTO HIDE SUCCESS ----------------
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage("");
+      }, 2000); // 3 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  // ---------------- FETCH INVESTMENTS ----------------
   const fetchInvestments = async () => {
-    setError("");
     try {
       const res = await API.get("/investments/");
       const data = res.data || [];
@@ -25,7 +40,9 @@ function Investments() {
         (sum, inv) => sum + Number(inv.current_value || 0),
         0
       );
+
       setTotalValue(total);
+
     } catch {
       setError("Failed to load investments");
     } finally {
@@ -33,31 +50,45 @@ function Investments() {
     }
   };
 
+  // ---------------- REFRESH PRICES ----------------
   const updatePrices = async () => {
     setError("");
+    setMessage("");
+
     try {
-      const res = await API.post("/investments/update-prices");
-      const { updated, failed, errors } = res.data;
+      const res = await API.post("/investments/refresh/");
+
+      // ✅ Success banner
+      setMessage(
+        res.data.message ||
+        "Prices refreshed successfully ✅"
+      );
 
       await fetchInvestments();
 
-      if (failed > 0) {
-        setError(
-          `Prices updated: ${updated}, Failed: ${failed}. ` +
-            errors.map(e => `${e.symbol}: ${e.error}`).join(" | ")
-        );
-      }
     } catch {
-      setError("Failed to update prices. Server error.");
+      setError(
+        "Failed to update prices. Server error."
+      );
     }
   };
 
-  if (loading) return <div className="loading">Loading investments...</div>;
+  // ---------------- LOADING ----------------
+  if (loading) {
+    return (
+      <div className="loading">
+        Loading investments...
+      </div>
+    );
+  }
 
+  // ---------------- UI ----------------
   return (
     <div className="investments-page">
+
       {/* HEADER */}
       <div className="portfolio-header">
+
         <div className="portfolio-left">
           <h1>📊 Investments Overview</h1>
           <p className="subtitle">
@@ -66,26 +97,45 @@ function Investments() {
         </div>
 
         <div className="portfolio-right">
+
           <div className="portfolio-total">
             ₹ {totalValue.toLocaleString("en-IN")}
             <span>Total Portfolio Value</span>
           </div>
 
-          <button className="refresh-btn" onClick={updatePrices}>
+          <button
+            className="refresh-btn"
+            onClick={updatePrices}
+          >
             🔄 Refresh Prices
           </button>
+
         </div>
       </div>
 
-      {/* ERROR */}
-      {error && <div className="error-banner">{error}</div>}
+      {/* SUCCESS MESSAGE */}
+      {message && (
+        <div className="success-banner">
+          {message}
+        </div>
+      )}
+
+      {/* ERROR MESSAGE */}
+      {error && (
+        <div className="error-banner">
+          {error}
+        </div>
+      )}
 
       {/* CHARTS */}
       {investments.length > 0 && (
         <div className="charts-section">
+
           <div className="chart-card">
-            <h3>Asset Allocation</h3>
-            <InvestmentPieChart investments={investments} />
+            <h3>Symbol Allocation</h3>
+            <InvestmentPieChart
+              investments={investments}
+            />
           </div>
 
           <div className="chart-card stats-card">
@@ -93,7 +143,9 @@ function Investments() {
 
             <div className="stat">
               <span>Total Assets</span>
-              <strong>{investments.length}</strong>
+              <strong>
+                {investments.length}
+              </strong>
             </div>
 
             <div className="stat">
@@ -101,7 +153,9 @@ function Investments() {
               <strong>
                 ₹{" "}
                 {Math.max(
-                  ...investments.map(i => Number(i.current_value || 0))
+                  ...investments.map(i =>
+                    Number(i.current_value || 0)
+                  )
                 ).toLocaleString("en-IN")}
               </strong>
             </div>
@@ -111,10 +165,12 @@ function Investments() {
               <strong>
                 ₹{" "}
                 {(
-                  totalValue / investments.length
+                  totalValue /
+                  investments.length
                 ).toLocaleString("en-IN")}
               </strong>
             </div>
+
           </div>
         </div>
       )}
@@ -123,15 +179,21 @@ function Investments() {
       {investments.length === 0 ? (
         <div className="empty-state">
           <h3>No investments found</h3>
-          <p>Add transactions to start tracking your portfolio</p>
+          <p>
+            Add transactions to start tracking your portfolio
+          </p>
         </div>
       ) : (
         <div className="investments-list">
           {investments.map(inv => (
-            <InvestmentCard key={inv.id} investment={inv} />
+            <InvestmentCard
+              key={inv.id}
+              investment={inv}
+            />
           ))}
         </div>
       )}
+
     </div>
   );
 }
