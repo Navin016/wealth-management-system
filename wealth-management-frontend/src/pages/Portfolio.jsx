@@ -173,4 +173,3 @@ function Card({ title, value, highlight, variant = "normal" }) {
     </div>
   );
 }
-\

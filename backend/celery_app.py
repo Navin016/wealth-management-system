@@ -3,20 +3,32 @@ import os
 from celery import Celery
 from celery.schedules import crontab
 
+# Ensure app path
 sys.path.append(os.path.dirname(__file__))
+
+# Redis URL from environment
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
 celery_app = Celery(
     "wealth_management",
-    broker="redis://localhost:6379/0",
-    backend="redis://localhost:6379/0"
+    broker=REDIS_URL,
+    backend=REDIS_URL
 )
 
-celery_app.conf.timezone = "Asia/Kolkata"
+# Config
+celery_app.conf.update(
+    timezone="Asia/Kolkata",
+    enable_utc=True,
+    task_serializer="json",
+    accept_content=["json"],
+    result_serializer="json",
+    broker_connection_retry_on_startup=True,
+)
 
-# Auto-discover
+# Auto-discover tasks
 celery_app.autodiscover_tasks(["app.tasks"])
 
-# Force import (important)
+# Force import
 celery_app.conf.imports = [
     "app.tasks.price_tasks"
 ]

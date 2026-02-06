@@ -1,10 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import date, datetime
 from enum import Enum
 from typing import Optional
 
 
+# -----------------------------
 # ENUMS (must match DB enums)
+# -----------------------------
 class GoalType(str, Enum):
     retirement = "retirement"
     home = "home"
@@ -18,25 +20,50 @@ class GoalStatus(str, Enum):
     completed = "completed"
 
 
-# 🔹 CREATE GOAL (POST)
+# -----------------------------
+# CREATE GOAL (POST)
+# -----------------------------
 class GoalCreate(BaseModel):
     user_id: int
     goal_type: GoalType
-    target_amount: float
+
+    target_amount: float = Field(
+        gt=0,
+        description="Target amount must be greater than 0"
+    )
+
     target_date: date
-    monthly_contribution: Optional[float] = None
+
+    monthly_contribution: Optional[float] = Field(
+        default=None,
+        ge=0
+    )
 
 
-# 🔹 UPDATE GOAL (PUT / PATCH)
+# -----------------------------
+# UPDATE GOAL (PUT / PATCH)
+# -----------------------------
 class GoalUpdate(BaseModel):
     goal_type: Optional[GoalType] = None
-    target_amount: Optional[float] = None
+
+    target_amount: Optional[float] = Field(
+        default=None,
+        gt=0
+    )
+
     target_date: Optional[date] = None
-    monthly_contribution: Optional[float] = None
+
+    monthly_contribution: Optional[float] = Field(
+        default=None,
+        ge=0
+    )
+
     status: Optional[GoalStatus] = None
 
 
-# 🔹 RESPONSE MODEL (GET)
+# -----------------------------
+# RESPONSE MODEL (GET)
+# -----------------------------
 class GoalResponse(BaseModel):
     id: int
     user_id: int
@@ -47,5 +74,6 @@ class GoalResponse(BaseModel):
     status: GoalStatus
     created_at: datetime
 
+    # Pydantic v2 ORM compatibility
     class Config:
-        from_attributes = True   # (Pydantic v2)
+        from_attributes = True

@@ -1,46 +1,53 @@
-# from pydantic import BaseModel, EmailStr
-# from enum import Enum
-
-
-# class RiskProfile(str, Enum):
-#     conservative = "conservative"
-#     moderate = "moderate"
-#     aggressive = "aggressive"
-
-
-# class UserCreate(BaseModel):
-#     name: str
-#     email: EmailStr
-#     password: str
-#     risk_profile: RiskProfile = RiskProfile.moderate
-
-#-------------------------------------------------------------
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from enum import Enum
 from datetime import datetime
 from typing import Optional
 
+
+# -----------------------------
+# ENUMS
+# -----------------------------
 class RiskProfile(str, Enum):
     conservative = "conservative"
     moderate = "moderate"
     aggressive = "aggressive"
+
 
 class KYCStatus(str, Enum):
     unverified = "unverified"
     verified = "verified"
     rejected = "rejected"
 
+
+# -----------------------------
+# CREATE USER
+# -----------------------------
 class UserCreate(BaseModel):
-    name: str
+    name: str = Field(..., min_length=2, max_length=100)
+
     email: EmailStr
-    password: str
+
+    password: str = Field(
+        ...,
+        min_length=6,
+        description="Password must be at least 6 characters"
+    )
+
+    # Optional — enable later if needed
     # risk_profile: RiskProfile = RiskProfile.moderate
 
+
+# -----------------------------
+# LOGIN
+# -----------------------------
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
 
+# -----------------------------
+# RESPONSE
+# -----------------------------
 class UserResponse(BaseModel):
     id: int
     name: Optional[str]
@@ -52,9 +59,17 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
+# -----------------------------
+# JWT TOKEN RESPONSE
+# -----------------------------
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
+
+# -----------------------------
+# TOKEN PAYLOAD
+# -----------------------------
 class TokenData(BaseModel):
     user_id: Optional[int] = None

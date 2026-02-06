@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from decimal import Decimal
 from datetime import datetime
+
 from app.models.investment import AssetType
 
 
@@ -9,10 +10,13 @@ class InvestmentResponse(BaseModel):
     id: int
     symbol: str
     asset_type: AssetType
-    units: Decimal
+
+    units: Decimal = Field(ge=0)
     avg_buy_price: Optional[Decimal]
-    cost_basis: Decimal
-    current_value: Decimal
+
+    cost_basis: Decimal = Field(ge=0)
+    current_value: Decimal = Field(ge=0)
+
     last_price: Optional[Decimal]
     last_price_at: Optional[datetime]
 
@@ -23,3 +27,8 @@ class InvestmentResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+        # ✅ Decimal → JSON safe serialization
+        json_encoders = {
+            Decimal: lambda v: float(v)
+        }
