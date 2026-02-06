@@ -274,3 +274,20 @@
     justify-content: space-between;
   }
 }
+.withdraw-btn {
+  background: #ef4444;
+  color: #450a0a;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.contribute-btn {
+  background: #11df2d;
+  color: #030303;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 700;
+}

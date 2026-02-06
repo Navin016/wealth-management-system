@@ -1,10 +1,243 @@
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
+/* PAGE BACKGROUND */
+.pie-details{
+  background: none;
 }
 
-th, td {
-  padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
+.portfolio-page {
+  min-height: 100vh;
+  padding: 24px;
+  background: none
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.portfolio-loading {
+  text-align: center;
+  margin-top: 80px;
+  font-size: 1.1rem;
+  color: #22d3ee;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* SIMPLE PULSE ANIMATION */
+
+@keyframes pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+/* SUMMARY SECTION */
+
+.summary-section {
+  display: grid;
+  gap: 16px;
+ 
+}
+
+
+.summary-row {
+  display: grid;
+  gap: 12px;
+}
+
+.summary-row-top {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  
+}
+.summary-card-title{
+  margin-left: 0;
+ background: none;
+}
+
+.summary-row-bottom {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* SUMMARY CARD */
+
+.summary-card {
+  background: rgba(2, 6, 23, 0.6);
+  border-radius: 16px;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  box-shadow: 0 10px 24px rgba(8, 47, 73, 0.35);
+  padding: 16px 18px;
+  backdrop-filter: blur(16px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+              border-color 0.18s ease, background 0.18s ease;
+  cursor: default;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(8, 47, 73, 0.6);
+  border-color: rgba(34, 211, 238, 0.5);
+  background: rgba(2, 6, 23, 0.75);
+}
+
+.summary-card-big {
+  padding: 18px 20px;
+}
+
+.summary-card-compact {
+  padding: 12px 14px;
+}
+
+/* CARD TEXT */
+
+.summary-card-title {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.summary-card-value {
+  margin-top: 6px;
+  margin-bottom: 0;
+  font-weight: 600;
+  color: #67e8f9;
+  font-size: 1.35rem;
+}
+
+.summary-card-big .summary-card-value {
+  font-size: 1.6rem;
+}
+
+.summary-card-compact .summary-card-value {
+  font-size: 1.1rem;
+}
+
+.summary-card-value-positive {
+  color: #4ade80;
+}
+
+/* CARD ACCENT LINE */
+
+.summary-card-accent {
+  margin-top: 8px;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #22d3ee, #38bdf8);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.18s ease;
+}
+
+.summary-card:hover .summary-card-accent {
+  transform: scaleX(1);
+}
+
+/* CHARTS LAYOUT */
+
+.charts-section {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 1200px) {
+  .charts-section {
+    grid-template-columns: 1.1fr 1.1fr;
+  }
+}
+
+/* CHART CARD WRAPPER */
+
+.chart-card {
+  background: rgba(2, 6, 23, 0.6);
+  border-radius: 18px;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  box-shadow: 0 14px 32px rgba(8, 47, 73, 0.4);
+  padding: 18px 20px 20px;
+  backdrop-filter: blur(18px);
+   background: none;
+}
+
+.chart-title {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #22d3ee;
+  
+}
+
+/* ALLOCATION LEGEND */
+
+.allocation-legend {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+   
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.allocation-legend-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(2, 6, 23, 0.7);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+}
+
+.allocation-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.allocation-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.allocation-symbol {
+  color: #22d3ee;
+}
+
+.allocation-percent {
+  color: #e5e7eb;
+}
+
+/* PERFORMANCE HEADER */
+
+.performance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.period-select {
+  background: #020617;
+  color: #22d3ee;
+  border-radius: 8px;
+  border: 1px solid #22d3ee;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .portfolio-page {
+    padding: 16px;
+    gap: 18px;
+  }
+
+  .chart-card {
+    padding: 14px 14px 16px;
+  }
+
+  .performance-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
 }

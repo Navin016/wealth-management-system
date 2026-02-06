@@ -1,48 +1,36 @@
 import { useEffect, useState } from "react";
+import API from "../api";
+import InvestmentPieChart from "../components/InvestmentPieChart";
 import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
   ResponsiveContainer,
   LineChart,
   Line,
   XAxis,
   YAxis,
   CartesianGrid,
+  Tooltip,
 } from "recharts";
-import API from "../api";
-
-// 🎨 Pie colors (cyan theme shades)
-const PIE_COLORS = [
-  "#22d3ee",
-  "#06b6d4",
-  "#67e8f9",
-  "#0891b2",
-  "#0e7490",
-  "#38bdf8",
-];
+import "./Portfolio.css";
 
 export default function Portfolio() {
   const [summary, setSummary] = useState(null);
-  const [allocation, setAllocation] = useState([]);
+  const [investments, setInvestments] = useState([]);      // ← same shape as Investments page
   const [performance, setPerformance] = useState([]);
   const [period, setPeriod] = useState("1mo");
   const [loading, setLoading] = useState(true);
 
-  // ---------------- FETCH DATA ----------------
   const fetchPortfolio = async () => {
     try {
       setLoading(true);
 
-      const [s, a, p] = await Promise.all([
+      const [s, inv, p] = await Promise.all([
         API.get("/portfolio/summary"),
-        API.get("/portfolio/allocation"),
+        API.get("/investments/"),                          // ← reuse investments endpoint
         API.get(`/portfolio/performance?period=${period}`),
       ]);
 
       setSummary(s.data);
-      setAllocation(a.data.allocation);
+      setInvestments(inv.data || []);
       setPerformance(p.data.performance);
     } catch (err) {
       console.error(err);
@@ -56,112 +44,72 @@ export default function Portfolio() {
   }, [period]);
 
   if (loading || !summary) {
-    return (
-      <div className="text-center text-cyan-300 mt-20 text-lg animate-pulse">
-        Loading Portfolio...
-      </div>
-    );
+    return <div className="portfolio-loading">Loading Portfolio...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#020617] to-[#03122f] text-white p-6 space-y-8">
-
-      {/* ---------------- SUMMARY CARDS ---------------- */}
-      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-6">
-
-        <Card title="Portfolio Value" value={`$${summary.total_portfolio_value}`} />
-        <Card title="Total Invested" value={`$${summary.total_invested}`} />
-        <Card
-          title="Gain / Loss"
-          value={`$${summary.total_gain_loss}`}
-          highlight={summary.total_gain_loss >= 0}
-        />
-        <Card
-          title="Return %"
-          value={`${summary.total_gain_loss_percent}%`}
-          highlight={summary.total_gain_loss_percent >= 0}
-        />
-        <Card title="Wallet" value={`$${summary.wallet_balance}`} />
-        <Card title="Net Worth" value={`$${summary.net_worth}`} />
-
-      </div>
-
-      {/* ---------------- CHARTS ---------------- */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-
-        {/* ---------- SYMBOL ALLOCATION PIE ---------- */}
-        <div className="glass-card p-6">
-          <h2 className="text-xl font-semibold mb-4 text-cyan-300">
-            Symbol Allocation
-          </h2>
-
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={allocation}
-                dataKey="value"
-                nameKey="symbol"
-                outerRadius={110}
-              >
-                {allocation.map((_, i) => (
-                  <Cell
-                    key={i}
-                    fill={PIE_COLORS[i % PIE_COLORS.length]}
-                  />
-                ))}
-              </Pie>
-
-              <Tooltip
-                formatter={(value, name) => [`$${value}`, name]}
-                contentStyle={{
-                  background: "#020617",
-                  border: "1px solid #22d3ee",
-                  borderRadius: "12px",
-                  color: "white",
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-
-          {/* Legend */}
-          <div className="mt-4 space-y-2 text-sm">
-            {allocation.map((item, i) => (
-              <div
-                key={item.symbol}
-                className="flex justify-between px-3 py-2 rounded-lg bg-[#020617]/60 border border-cyan-500/20"
-              >
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{
-                      background:
-                        PIE_COLORS[i % PIE_COLORS.length],
-                    }}
-                  />
-                  <span className="text-cyan-300">
-                    {item.symbol}
-                  </span>
-                </div>
-                <span className="text-gray-300">
-                  {item.percentage}%
-                </span>
-              </div>
-            ))}
-          </div>
+    <div className="portfolio-page">
+      {/* SUMMARY CARDS */}
+      <div className="summary-section">
+        {/* Top row: main totals */}
+        <div className="summary-row summary-row-top">
+          <Card
+            title="Portfolio Value"
+            value={`₹${summary.total_portfolio_value?.toLocaleString("en-IN")}`}
+            variant="big"
+          />
+          <Card
+            title="Total Invested"
+            value={`₹${summary.total_invested?.toLocaleString("en-IN")}`}
+            variant="big"
+          />
+          <Card
+            title="Gain / Loss"
+            value={`₹${summary.total_gain_loss?.toLocaleString("en-IN")}`}
+            highlight={summary.total_gain_loss >= 0}
+            variant="big"
+          />
         </div>
 
-        {/* ---------- PERFORMANCE LINE ---------- */}
-        <div className="glass-card p-6">
+        {/* Bottom row: compact stats */}
+        <div className="summary-row summary-row-bottom">
+          <Card
+            title="Return %"
+            value={`${summary.total_gain_loss_percent}%`}
+            highlight={summary.total_gain_loss_percent >= 0}
+            variant="compact"
+          />
+          <Card
+            title="Wallet"
+            value={`₹${summary.wallet_balance?.toLocaleString("en-IN")}`}
+            variant="compact"
+          />
+          <Card
+            title="Net Worth"
+            value={`₹${summary.net_worth?.toLocaleString("en-IN")}`}
+            variant="compact"
+          />
+        </div>
+      </div>
 
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-cyan-300">
-              Portfolio Performance
-            </h2>
+      {/* CHARTS */}
+      <div className="charts-section">
+        {/* Allocation pie chart using the same component as Investments */}
+        {investments.length > 0 && (
+          <div className="chart-card">
+            <h2 className="chart-title">Symbol Allocation</h2>
+            <InvestmentPieChart investments={investments} />
+          </div>
+        )}
 
+        {/* PERFORMANCE LINE */}
+        <div className="chart-card">
+          <div className="performance-header">
+            <h2 className="chart-title">Portfolio Performance</h2>
             <select
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
-              className="bg-[#020617] border border-cyan-500 rounded-lg px-3 py-1 text-cyan-300"
+              className="period-select"
             >
               <option value="1d">1D</option>
               <option value="5d">1W</option>
@@ -176,7 +124,7 @@ export default function Portfolio() {
             <LineChart data={performance}>
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="#0ea5e9"
+                stroke="#0ee978"
                 opacity={0.2}
               />
               <XAxis dataKey="date" stroke="#67e8f9" />
@@ -184,9 +132,9 @@ export default function Portfolio() {
               <Tooltip
                 contentStyle={{
                   background: "#020617",
-                  border: "1px solid #22d3ee",
+                  border: "1px solid #2ec449",
                   borderRadius: "12px",
-                  color: "white",
+                  color: "#ffffff",
                 }}
               />
               <Line
@@ -204,20 +152,25 @@ export default function Portfolio() {
   );
 }
 
-// ---------------- CARD COMPONENT ----------------
-function Card({ title, value, highlight }) {
+// CARD COMPONENT
+function Card({ title, value, highlight, variant = "normal" }) {
+  const classes = ["summary-card"];
+  if (variant === "big") classes.push("summary-card-big");
+  if (variant === "compact") classes.push("summary-card-compact");
+
   return (
-    <div className="bg-[#020617]/60 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-5 shadow-lg shadow-cyan-500/10 hover:scale-[1.02] transition-all duration-300">
-      <p className="text-sm text-gray-400 bg-transparent">
-        {title}
-      </p>
+    <div className={classes.join(" ")}>
+      <p className="summary-card-title">{title}</p>
       <h3
-        className={`text-2xl font-semibold mt-1 ${
-          highlight ? "text-green-400" : "text-cyan-300"
-        }`}
+        className={
+          "summary-card-value" +
+          (highlight ? " summary-card-value-positive" : "")
+        }
       >
         {value}
       </h3>
+      <div className="summary-card-accent" />
     </div>
   );
 }
+\

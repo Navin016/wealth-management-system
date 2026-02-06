@@ -199,7 +199,7 @@
 /* Active state */
 
 .register-btn.active {
-  background: linear-gradient(135deg, #16a34a, #22c55e);
+  background:rgb(20, 146, 219);
   color: white;
 }
 

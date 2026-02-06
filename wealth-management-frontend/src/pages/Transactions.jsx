@@ -16,6 +16,7 @@ function Transactions() {
     asset_type: "stock",
     quantity: "",
     fees: "0",
+    amount: "",
   });
 
   useEffect(() => {
@@ -43,28 +44,37 @@ function Transactions() {
     }));
   };
 
+  // ✅ UPDATED SUBMIT LOGIC
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const body = {
-        symbol: formData.symbol.toUpperCase(),
-        asset_type: formData.asset_type,
-        quantity: parseFloat(formData.quantity),
-        fees: parseFloat(formData.fees || "0"),
-      };
+      let body = {};
+      let endpoint = `/transactions/${mode}`;
 
-      const endpoint =
-        mode === "buy" ? "/transactions/buy" : "/transactions/sell";
+      if (mode === "buy" || mode === "sell") {
+        body = {
+          symbol: formData.symbol.toUpperCase(),
+          asset_type: formData.asset_type,
+          quantity: parseFloat(formData.quantity),
+          fees: parseFloat(formData.fees || "0"),
+        };
+      } else {
+        body = {
+          amount: parseFloat(formData.amount),
+        };
+      }
 
       await API.post(endpoint, body);
 
+      // Reset form
       setFormData({
         symbol: "",
         asset_type: "stock",
         quantity: "",
         fees: "0",
+        amount: "",
       });
 
       setShowForm(false);
@@ -82,6 +92,7 @@ function Transactions() {
 
   return (
     <div className="transactions-page">
+      {/* HEADER */}
       <div className="transactions-header-row">
         <div className="page-header">
           <h1>Transactions</h1>
@@ -98,6 +109,7 @@ function Transactions() {
         </button>
       </div>
 
+      {/* FILTER */}
       <div className="transactions-filter-row">
         <label className="entries-label">
           Show
@@ -116,8 +128,10 @@ function Transactions() {
 
       {error && <div className="error-banner">{error}</div>}
 
+      {/* ================= FORM ================= */}
       {showForm && (
         <div className="transaction-form">
+          {/* TABS */}
           <div className="form-tabs">
             <button
               className={mode === "buy" ? "active" : ""}
@@ -126,6 +140,7 @@ function Transactions() {
             >
               Buy
             </button>
+
             <button
               className={mode === "sell" ? "active" : ""}
               onClick={() => setMode("sell")}
@@ -133,57 +148,92 @@ function Transactions() {
             >
               Sell
             </button>
+
+            <button
+              className={mode === "contribute" ? "active" : ""}
+              onClick={() => setMode("contribute")}
+              type="button"
+            >
+              Contribute
+            </button>
+
+            <button
+              className={mode === "withdraw" ? "active" : ""}
+              onClick={() => setMode("withdraw")}
+              type="button"
+            >
+              Withdraw
+            </button>
           </div>
 
+          {/* FORM */}
           <form onSubmit={handleSubmit}>
-            <select
-              name="asset_type"
-              value={formData.asset_type}
-              onChange={handleChange}
-              required
-            >
-              <option value="stock">Stock</option>
-              <option value="etf">ETF</option>
-              <option value="mutual_fund">Mutual Fund</option>
-            </select>
+            {/* INVESTMENT FIELDS */}
+            {(mode === "buy" || mode === "sell") && (
+              <>
+                <select
+                  name="asset_type"
+                  value={formData.asset_type}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="stock">Stock</option>
+                  <option value="etf">ETF</option>
+                  <option value="mutual_fund">Mutual Fund</option>
+                </select>
 
-            <input
-              name="symbol"
-              type="text"
-              placeholder="Symbol (e.g., TCS)"
-              value={formData.symbol}
-              onChange={handleChange}
-              required
-            />
+                <input
+                  name="symbol"
+                  type="text"
+                  placeholder="Symbol (e.g., TCS)"
+                  value={formData.symbol}
+                  onChange={handleChange}
+                  required
+                />
 
-            <input
-              name="quantity"
-              type="number"
-              placeholder="Quantity"
-              step="0.01"
-              min="0"
-              value={formData.quantity}
-              onChange={handleChange}
-              required
-            />
+                <input
+                  name="quantity"
+                  type="number"
+                  placeholder="Quantity"
+                  step="0.01"
+                  min="0"
+                  value={formData.quantity}
+                  onChange={handleChange}
+                  required
+                />
 
-            <input
-              name="fees"
-              type="number"
-              placeholder="Fees"
-              step="0.01"
-              min="0"
-              value={formData.fees}
-              onChange={handleChange}
-            />
+                <input
+                  name="fees"
+                  type="number"
+                  placeholder="Fees"
+                  step="0.01"
+                  min="0"
+                  value={formData.fees}
+                  onChange={handleChange}
+                />
+              </>
+            )}
 
+            {/* CASH FIELDS */}
+            {(mode === "contribute" || mode === "withdraw") && (
+              <input
+                name="amount"
+                type="number"
+                placeholder="Amount"
+                step="0.01"
+                min="0"
+                value={formData.amount}
+                onChange={handleChange}
+                required
+              />
+            )}
+
+            {/* ACTIONS */}
             <div className="form-actions">
-              <button
-                type="submit"
-                className={mode === "buy" ? "buy-btn" : "sell-btn"}
-              >
-                {mode === "buy" ? "Submit Buy" : "Submit Sell"}
+              <button type="submit" className={`${mode}-btn`}>
+                Submit {mode}
               </button>
+
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
@@ -196,6 +246,7 @@ function Transactions() {
         </div>
       )}
 
+      {/* ================= LIST ================= */}
       {loading ? (
         <div className="loading">Loading transactions...</div>
       ) : visibleTransactions.length === 0 ? (
@@ -206,34 +257,69 @@ function Transactions() {
         <div className="transactions-list">
           {visibleTransactions.map((tx) => (
             <div key={tx.id} className={`transaction-row ${tx.type}`}>
+              {/* MAIN ROW */}
               <div className="transaction-main">
                 <div className="tx-left">
-                  <span className="tx-type-pill">{tx.type?.toUpperCase()}</span>
-                  <span className="tx-symbol">{tx.symbol}</span>
-                  <span className="tx-asset">{tx.asset_type}</span>
+                  <span className="tx-type-pill">
+                    {tx.type?.toUpperCase()}
+                  </span>
+
+                  {tx.symbol && (
+                    <span className="tx-symbol">{tx.symbol}</span>
+                  )}
+
+                  {tx.asset_type && (
+                    <span className="tx-asset">{tx.asset_type}</span>
+                  )}
                 </div>
 
                 <div className="tx-right">
                   <span className="tx-amount">
-                    ₹{(tx.price * tx.quantity).toFixed(2)}
+                    {tx.type === "contribute" ||
+                    tx.type === "withdraw"
+                      ? `₹${tx.amount?.toFixed(2)}`
+                      : `₹${(
+                          tx.price * tx.quantity
+                        ).toFixed(2)}`}
                   </span>
+
                   <button
                     className="view-more-btn"
                     onClick={() => toggleExpand(tx.id)}
                   >
-                    {expandedId === tx.id ? "Hide" : "View more"}
+                    {expandedId === tx.id
+                      ? "Hide"
+                      : "View more"}
                   </button>
                 </div>
               </div>
 
+              {/* EXPANDED DETAILS */}
               {expandedId === tx.id && (
                 <div className="transaction-extra">
-                  <div>Quantity: {tx.quantity}</div>
-                  <div>Price: ₹{tx.price}</div>
-                  <div>Fees: ₹{tx.fees}</div>
+                  {(tx.type === "buy" ||
+                    tx.type === "sell") && (
+                    <>
+                      <div>
+                        Quantity: {tx.quantity}
+                      </div>
+                      <div>Price: ₹{tx.price}</div>
+                      <div>Fees: ₹{tx.fees}</div>
+                    </>
+                  )}
+
+                  {(tx.type === "contribute" ||
+                    tx.type === "withdraw") && (
+                    <div>
+                      Amount: ₹{tx.amount}
+                    </div>
+                  )}
+
                   <div>
                     Executed at:{" "}
-                    {new Date(tx.executed_at).toLocaleString()}
+                    {new Date(
+                      tx.executed_at
+                    ).toLocaleString()}
                   </div>
                 </div>
               )}

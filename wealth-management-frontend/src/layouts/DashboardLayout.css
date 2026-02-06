@@ -1,0 +1,52 @@
+/* ========================================
+   DASHBOARD LAYOUT - WITH FIXED SIDEBAR
+======================================== */
+
+.dashboard-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: block;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ====== MAIN CONTENT ====== */
+.dashboard-main-content {
+  width: 100%;
+  margin-left: calc(260px + 38px); /* sidebar width */
+  min-height: 100vh;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #0f172a, #020617);
+  transition: margin-left 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* When sidebar is collapsed */
+.dashboard-layout:has(.sidebar.collapsed) .dashboard-main-content {
+  margin-left: 80px;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 1024px) {
+  .dashboard-main-content {
+    margin-left: 80px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-main-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .dashboard-layout .sidebar {
+    left: -280px;
+  }
+
+  .dashboard-layout .sidebar.open {
+    left: 0;
+  }
+}

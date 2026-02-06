@@ -66,7 +66,7 @@ def refresh_prices(
 
             inv.last_price = Decimal(str(price))
             inv.current_value = inv.units * Decimal(str(price))
-            inv.last_price_at = datetime.utcnow()
+            inv.last_price_at = datetime.now()
 
             # Store return safely
             inv.one_year_return_rate = Decimal(

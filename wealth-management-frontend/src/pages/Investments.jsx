@@ -9,31 +9,15 @@ function Investments() {
   const [loading, setLoading] = useState(true);
   const [totalValue, setTotalValue] = useState(0);
 
-
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
-  // ---------------- FETCH ON LOAD ----------------
-  useEffect(() => {
-    fetchInvestments();
-  }, []);
-
-  // ---------------- AUTO HIDE SUCCESS ----------------
-  useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => {
-        setMessage("");
-      }, 2000); // 3 seconds
-
-      return () => clearTimeout(timer);
-    }
-  }, [message]);
 
   // ---------------- FETCH INVESTMENTS ----------------
   const fetchInvestments = async () => {
     try {
       const res = await API.get("/investments/");
       const data = res.data || [];
+
       setInvestments(data);
 
       const total = data.reduce(
@@ -42,7 +26,6 @@ function Investments() {
       );
 
       setTotalValue(total);
-
     } catch {
       setError("Failed to load investments");
     } finally {
@@ -50,7 +33,32 @@ function Investments() {
     }
   };
 
-  // ---------------- REFRESH PRICES ----------------
+  // ---------------- FETCH ON LOAD + AUTO FETCH ----------------
+  useEffect(() => {
+    // Initial fetch
+    fetchInvestments();
+
+    // Auto fetch every 10 minutes (600000 ms)
+    const interval = setInterval(() => {
+      fetchInvestments();
+    }, 600000);
+
+    // Cleanup
+    return () => clearInterval(interval);
+  }, []);
+
+  // ---------------- AUTO HIDE SUCCESS ----------------
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage("");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  // ---------------- REFRESH PRICES (MANUAL) ----------------
   const updatePrices = async () => {
     setError("");
     setMessage("");
@@ -58,12 +66,12 @@ function Investments() {
     try {
       const res = await API.post("/investments/refresh/");
 
-      // ✅ Success banner
       setMessage(
         res.data.message ||
         "Prices refreshed successfully ✅"
       );
 
+      // Refetch updated prices immediately
       await fetchInvestments();
 
     } catch {
