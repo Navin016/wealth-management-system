@@ -8,29 +8,20 @@ from app.models import user, goal, investment, transaction
 from app.routers import auth, goals, transactions, investments, portfolio, reports
 
 
-# -----------------------------
-# Create DB tables
-# -----------------------------
 Base.metadata.create_all(bind=engine)
 
-
-# -----------------------------
-# FastAPI App
-# -----------------------------
 app = FastAPI(title="Wealth Management Backend")
 
-
-# -----------------------------
-# CORS Configuration
-# -----------------------------
-FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "https://wealth-management-system-1-06go.onrender.com"
 ]
 
-# Add deployed frontend if exists
+FRONTEND_URL = os.getenv("FRONTEND_URL")
+
 if FRONTEND_URL:
     origins.append(FRONTEND_URL)
 
@@ -44,9 +35,6 @@ app.add_middleware(
 )
 
 
-# -----------------------------
-# Routers
-# -----------------------------
 app.include_router(auth.router)
 app.include_router(goals.router)
 app.include_router(investments.router)
@@ -55,9 +43,6 @@ app.include_router(portfolio.router)
 app.include_router(reports.router)
 
 
-# -----------------------------
-# Health Check
-# -----------------------------
 @app.get("/")
 def root():
     return {"status": "working"}
