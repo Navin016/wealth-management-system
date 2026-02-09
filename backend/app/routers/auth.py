@@ -19,9 +19,10 @@ router = APIRouter(
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(
-    schemes=["bcrypt_sha256"],
+    schemes=["bcrypt_sha256", "bcrypt"],
     deprecated="auto"
 )
+
 
 
 def get_password_hash(password: str) -> str:
