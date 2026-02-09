@@ -252,6 +252,35 @@ def get_transactions(
 ):
     txns = db.query(Transaction).filter(
         Transaction.user_id == user.id
-    ).order_by(Transaction.executed_at.desc()).all()
+    ).order_by(Transaction.created_at.desc()).all()
 
     return txns
+@router.get("/recent")
+def get_recent_transactions(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+
+    transactions = (
+        db.query(Transaction)
+        .filter(Transaction.user_id == current_user.id)
+        .order_by(Transaction.created_at.desc())
+        .limit(5)
+        .all()
+    )
+
+    return [
+        {
+            "id": t.id,
+            "symbol": t.symbol,
+            "type": t.type.value,
+            "quantity": float(t.quantity or 0),
+            "price": float(t.price or 0),
+            "fees": float(t.fees or 0),
+            "amount": float(
+                (t.quantity or 0) * (t.price or 0)
+            ),
+            "date": t.created_at.isoformat(),
+        }
+        for t in transactions
+    ]

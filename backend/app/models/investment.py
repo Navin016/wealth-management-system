@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Numeric, String, TIMESTAMP, ForeignKey, Enum
+from sqlalchemy import Column, Integer, Numeric, String, TIMESTAMP, ForeignKey, Enum, Float
 from sqlalchemy.sql import func
 from app.database import Base
 import enum
@@ -31,6 +31,8 @@ class Investment(Base):
 
     # ✅ For simulation slider
     one_year_return_rate = Column(Numeric(10, 4))
+    unrealized_pnl = Column(Float, default=0)
+    pnl_percent = Column(Float, default=0)
 
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())

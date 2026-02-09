@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, Base
 from app.models import user, goal, investment, transaction
-from app.routers import auth, goals, transactions, investments, portfolio
+from app.routers import auth, goals, transactions, investments, portfolio, reports
 
 
 # -----------------------------
@@ -52,6 +52,7 @@ app.include_router(goals.router)
 app.include_router(investments.router)
 app.include_router(transactions.router)
 app.include_router(portfolio.router)
+app.include_router(reports.router)
 
 
 # -----------------------------

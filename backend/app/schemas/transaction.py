@@ -23,7 +23,7 @@ class TransactionResponse(BaseModel):
     fees: Optional[Decimal]
     asset_type: AssetType
     executed_at: Optional[datetime]
-
+    created_at: Optional[datetime]  
     class Config:
         from_attributes = True
 
