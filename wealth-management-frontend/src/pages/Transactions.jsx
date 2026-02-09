@@ -318,7 +318,7 @@ function Transactions() {
                   <div>
                     Executed at:{" "}
                     {new Date(
-                      tx.executed_at
+                      tx.created_at
                     ).toLocaleString()}
                   </div>
                 </div>

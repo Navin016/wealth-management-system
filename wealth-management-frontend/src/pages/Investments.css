@@ -20,7 +20,7 @@
   padding: 1.6rem 1.8rem;
   border-radius: 20px;
   margin-bottom: 2rem;
-  color: #f8fafc;
+  color:  #38bdf8;
 }
 
 .portfolio-left h1 {
@@ -43,8 +43,10 @@
 .portfolio-total {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #22c55e;
+  color: #38bdf8;
   text-align: right;
+  margin-right: 80px;
+  margin-bottom: 30px;
 }
 
 .portfolio-total span {
@@ -55,17 +57,23 @@
 }
 
 .refresh-btn {
-  background: #22c55e;
+  margin-bottom: 30px; 
+  background:  #38bdf8;
   border: none;
   color: #022c22;
   padding: 0.6rem 1.1rem;
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
+   transition: all 0.3s ease;
 }
 
 .refresh-btn:hover {
-  background: #16a34a;
+  background: #38bdf8;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow:
+    0 6px 9px rgba(56, 189, 248, 0.35),
+    0 0 9px rgba(56, 189, 248, 0.6);
 }
 
 /* CHARTS */

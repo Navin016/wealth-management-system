@@ -18,12 +18,12 @@
 .page-header h1 {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: #38bdf8;
 }
 
 /* ADD BUTTON */
 .add-btn {
-  background: #22c55e;
+  background:  #38bdf8;
   color: #022c22;
   border: none;
   padding: 0.6rem 1.2rem;
@@ -109,6 +109,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 12px;
+  background: none;
 }
 
 .transaction-form input,

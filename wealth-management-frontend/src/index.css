@@ -2,7 +2,7 @@
 html, body, #root {
   height: 100%;
   margin: 0;
- background:linear-gradient(135deg, #0f172a, #020617);
+  background: #0f172a;
 }
 
 * {
@@ -14,8 +14,8 @@ html, body, #root {
 /* GLOBAL */
 body {
   font-family: "Inter", "Segoe UI", sans-serif;
-  background-color: #181819;
-  color: #e5e7eb; /* better for dark theme */
+  background: #0f172a;
+  /* color: #e5e7eb; better for dark theme */
   line-height: 1.6;
 }
 
@@ -31,6 +31,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  
 }
 
 /* MAIN CONTENT — THIS FIXES HEIGHT ISSUE */
@@ -38,6 +39,7 @@ body {
   flex: 1;              /* takes remaining height */
   width: 100%;
   padding: 40px 20px;
+   background: #0f172a;
 }
 
 /* PUBLIC PAGES (login/register/home without sidebar) */

@@ -1,13 +1,19 @@
 import axios from "axios";
 
+// 🌐 Detect environment automatically
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:8000"
+    : "https://wealth-management-system-qo3x.onrender.com";
+
 const API = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: BASE_URL,
 });
 
 // 🔥 Attach JWT token to every request
 API.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("access_token"); // ✅ MUST match login
+    const token = localStorage.getItem("access_token"); // must match login key
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

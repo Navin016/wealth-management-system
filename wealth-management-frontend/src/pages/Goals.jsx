@@ -94,6 +94,32 @@ function Goals() {
     return Math.min((invested / goal.target_amount) * 100, 100);
   };
 
+  const handleEditGoal = (goal) => {
+    setEditingId(goal.id);
+    setForm({
+      goal_type: goal.goal_type || "custom",
+      target_amount: goal.target_amount,
+      target_date: goal.target_date ? goal.target_date.slice(0, 10) : "",
+      monthly_contribution: goal.monthly_contribution,
+    });
+  };
+
+  const handleDeleteGoal = (id) => {
+    if (!window.confirm("Delete this goal?")) return;
+    API.delete(`/goals/${id}`).then(() => {
+      fetchGoals(userId);
+      if (editingId === id) {
+        setEditingId(null);
+        setForm({
+          goal_type: "custom",
+          target_amount: "",
+          target_date: "",
+          monthly_contribution: 10000,
+        });
+      }
+    });
+  };
+
   const sliderPercent =
     ((form.monthly_contribution - 10000) / (100000 - 10000)) * 100;
 
@@ -105,7 +131,7 @@ function Goals() {
       <div className="goals-top-grid">
         {/* FORM */}
         <form className="goal-form" onSubmit={handleSubmit}>
-          <h2>Create / Update Goal</h2>
+          <h2>{editingId ? "Edit Goal" : "Create / Update Goal"}</h2>
 
           <select
             name="goal_type"
@@ -137,7 +163,7 @@ function Goals() {
             onChange={handleChange}
           />
 
-          {/* SLIDER (UNCHANGED) */}
+          {/* SLIDER */}
           <div className="slider-wrapper">
             <label>
               Monthly Contribution
@@ -213,6 +239,23 @@ function Goals() {
               <span className="progress-text">
                 {progress.toFixed(1)}% completed
               </span>
+
+              <div className="goal-actions">
+                <button
+                  type="button"
+                  className="goal-btn edit"
+                  onClick={() => handleEditGoal(goal)}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="goal-btn delete"
+                  onClick={() => handleDeleteGoal(goal.id)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           );
         })}
