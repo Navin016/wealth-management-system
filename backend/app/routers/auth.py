@@ -19,17 +19,18 @@ router = APIRouter(
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(
-    schemes=["bcrypt"],
+    schemes=["bcrypt_sha256"],
     deprecated="auto"
 )
 
-# ---------------- UTILS ---------------- #
 
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
+
 
 def create_access_token(data: dict):
     to_encode = data.copy()
@@ -37,12 +38,12 @@ def create_access_token(data: dict):
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# ---------------- ROUTES ---------------- #
 
 @router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
 
     existing_user = db.query(User).filter(User.email == user.email).first()
+
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -74,6 +75,7 @@ def login_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
+
     db_user = db.query(User).filter(User.email == form_data.username).first()
 
     if not db_user or not verify_password(form_data.password, db_user.password):
@@ -97,7 +99,7 @@ def read_me(current_user: User = Depends(get_current_user)):
     return {
         "id": current_user.id,
         "name": current_user.name,
-        "email": current_user.email,    
+        "email": current_user.email,
         "risk_profile": current_user.risk_profile,
-        "kyc_status":current_user.kyc_status
+        "kyc_status": current_user.kyc_status
     }
