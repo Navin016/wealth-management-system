@@ -1,44 +1,117 @@
-.contact {
-  max-width: 600px;
-  margin: 40px auto;
-  text-align: center;
+/* ================= WRAPPER ================= */
+
+.contact-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
 }
 
-.contact p {
-  color: #475569;
-  margin-bottom: 24px;
-}
+/* ================= CARD ================= */
 
-.contact-box {
+.contact-card {
+  width: 100%;
+  max-width: 480px;
   background: #020617;
-  padding: 30px;
+  border: 1px solid #1e293b;
+  padding: 26px;
+  border-radius: 16px;
+  transition: 0.3s ease;
+}
+
+/* Glow hover */
+
+.contact-card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 18px rgba(59,130,246,0.25);
+}
+
+/* ================= HEADINGS ================= */
+
+.contact-card h2 {
+  color: #38bdf8;
+  margin-bottom: 8px;
+}
+
+.contact-subtitle {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+/* ================= FLOATING GROUP ================= */
+
+.floating-group {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+/* INPUT + TEXTAREA */
+
+.floating-group input,
+.floating-group textarea {
+  width: 100%;
+  padding: 14px 12px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 14px;
+  transition: 0.25s;
+}
+
+/* Focus glow */
+
+.floating-group input:focus,
+.floating-group textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 10px rgba(59,130,246,0.35);
+}
+
+/* ================= LABEL ================= */
+
+.floating-group label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 13px;
+  pointer-events: none;
+  transition: 0.2s ease;
+  background: #020617;
+  padding: 0 4px;
+}
+
+/* FLOAT WHEN FOCUS OR HAS VALUE */
+
+.floating-group input:focus + label,
+.floating-group textarea:focus + label,
+.floating-group input:valid + label,
+.floating-group textarea:valid + label {
+  top: -8px;
+  font-size: 11px;
+  color: #38bdf8;
+}
+
+/* ================= BUTTON ================= */
+
+.contact-btn {
+  width: 100%;
+  padding: 12px;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-.contact-box input,
-.contact-box textarea {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 14px;
-  border-radius: 6px;
-  border: 1px solid #cbd5e1;
-}
-
-.contact-box textarea {
-  min-height: 120px;
-  resize: none;
-}
-
-.contact-box button {
-  width: 100%;
-  background: #2563eb;
+  border: none;
+  background: #3b82f6;
   color: white;
-  padding: 12px;
-  border-radius: 6px;
   font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
 }
 
-.contact-box button:hover {
-  background: #1d4ed8;
+/* Hover glow */
+
+.contact-btn:hover {
+  background: #2563eb;
+  box-shadow: 0 0 14px rgba(59,130,246,0.45);
 }

@@ -1,14 +1,360 @@
-.form-footer {
+/* ================= WRAPPER ================= */
+
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #020617
+  );
+}
+
+/* ================= CARD ================= */
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 26px;
+  border-radius: 16px;
+
+  transition: 0.3s ease;
+
+  /* Default shadow */
+  box-shadow: 0 0 0 transparent;
+}
+
+/* 🔵 SAME HOVER GLOW AS CONTACT / SETTINGS */
+
+.auth-card:hover {
+  border-color: rgba(56,189,248,0.45);
+
+  box-shadow:
+    0 0 0 1px rgba(56,189,248,0.35),
+    0 0 18px rgba(56,189,248,0.18),
+    inset 0 0 12px rgba(56,189,248,0.05);
+}
+
+/* ================= HEADING ================= */
+
+.auth-card h2 {
+  color: #38bdf8;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+/* ================= INPUT GROUP ================= */
+
+.input-group {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+/* ================= INPUT ================= */
+
+.input-group input {
+  width: 100%;
+  padding: 12px 42px 12px 12px;
+
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+
+  background: #020617;
+  color: #e5e7eb;
+
+  transition: 0.2s;
+}
+
+/* ================= FOCUS ================= */
+
+.input-group input:focus {
+  outline: none;
+
+  border-color: #3b82f6;
+
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,0.35),
+    0 0 10px rgba(59,130,246,0.18);
+}
+
+/* ================= EYE BUTTON ================= */
+
+.eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+  color: #a0b3ce;
+
+  transition: 0.2s;
+}
+
+.eye-btn:hover {
+  color: #60a5fa;
+}
+
+/* ================= BUTTON ================= */
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+
+  border-radius: 12px;
+  border: none;
+
+  background: #3b82f6;
+  color: white;
+
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+/* Hover glow button */
+
+.auth-btn:hover {
+  background: #2563eb;
+
+  box-shadow:
+    0 0 12px rgba(59,130,246,0.35);
+}
+
+/* ================= ERROR ================= */
+
+.error-banner {
+  background: rgba(239,68,68,0.15);
+  color: #ef4444;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+/* ================= FOOTER ================= */
+
+.auth-footer {
   margin-top: 16px;
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
+  color: #94a3b8;
 }
 
-.form-footer a {
-  color: #2563eb;
-  font-weight: 500;
+.auth-footer span {
+  color: #38bdf8;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.form-footer a:hover {
+.auth-footer span:hover {
   text-decoration: underline;
+}
+
+/* ================= PASSWORD MISMATCH ================= */
+
+.mismatch {
+  border-color: #ef4444 !important;
+}
+
+.mismatch-text {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: -6px;
+  margin-bottom: 10px;
+}
+/* ================= FLOATING GROUP ================= */
+
+.floating-group {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+/* INPUT */
+
+.floating-group input {
+  width: 100%;
+  padding: 14px 42px 14px 12px;
+
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+
+  background: #020617;
+  color: #e5e7eb;
+
+  font-size: 14px;
+
+  transition: 0.25s;
+}
+
+/* LABEL */
+
+.floating-group label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #94a3b8;
+  font-size: 13px;
+
+  pointer-events: none;
+  transition: 0.25s;
+
+  background: #020617;
+  padding: 0 4px;
+}
+
+/* FLOAT EFFECT */
+
+.floating-group input:focus + label,
+.floating-group input:not(:placeholder-shown) + label {
+  top: -8px;
+  font-size: 11px;
+  color: #38bdf8;
+}
+
+/* INPUT FOCUS */
+
+.floating-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,0.35),
+    0 0 10px rgba(59,130,246,0.18);
+}
+
+/* PASSWORD GROUP */
+
+.password-group input {
+  padding-right: 42px;
+}
+
+/* EYE BUTTON */
+
+.password-group .eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+  color: #a0b3ce;
+}
+
+.password-group .eye-btn:hover {
+  color: #60a5fa;
+}
+/* ================= FLOATING LABEL ================= */
+
+.floating-group {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+/* INPUT */
+
+.floating-group input {
+  width: 100%;
+  padding: 14px 42px 14px 12px;
+
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+
+  background: #020617;
+  color: #e5e7eb;
+
+  font-size: 14px;
+  transition: 0.25s;
+}
+
+/* LABEL */
+
+.floating-group label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #94a3b8;
+  font-size: 13px;
+
+  pointer-events: none;
+  transition: 0.25s;
+
+  background: #020617;
+  padding: 0 4px;
+}
+
+/* FLOAT EFFECT */
+
+.floating-group input:focus + label,
+.floating-group input:not(:placeholder-shown) + label {
+  top: -8px;
+  font-size: 11px;
+  color: #38bdf8;
+}
+
+/* INPUT FOCUS GLOW */
+
+.floating-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,0.35),
+    0 0 10px rgba(59,130,246,0.18);
+}
+
+/* PASSWORD GROUP */
+
+.password-group input {
+  padding-right: 42px;
+}
+
+/* EYE BUTTON */
+
+.eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+  color: #a0b3ce;
+  transition: 0.2s;
+}
+
+.eye-btn:hover {
+  color: #60a5fa;
+}
+
+/* MISMATCH */
+
+.mismatch {
+  border-color: #ef4444 !important;
+}
+
+.mismatch-text {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: -6px;
+  margin-bottom: 10px;
 }

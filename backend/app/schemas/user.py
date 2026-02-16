@@ -19,6 +19,13 @@ class KYCStatus(str, Enum):
     rejected = "rejected"
 
 
+# NEW ENUM — Gender
+class Gender(str, Enum):
+    male = "male"
+    female = "female"
+    other = "other"
+
+
 # -----------------------------
 # CREATE USER
 # -----------------------------
@@ -32,9 +39,6 @@ class UserCreate(BaseModel):
         min_length=6,
         description="Password must be at least 6 characters"
     )
-
-    # Optional — enable later if needed
-    # risk_profile: RiskProfile = RiskProfile.moderate
 
 
 # -----------------------------
@@ -56,6 +60,17 @@ class UserResponse(BaseModel):
     kyc_status: KYCStatus
     created_at: datetime
 
+    # -------- PROFILE FIELDS --------
+    phone: Optional[str]
+    city: Optional[str]
+    gender: Optional[Gender]
+    profession: Optional[str]
+    age: Optional[int]
+    salary: Optional[float] = Field(
+    None, ge=0
+    )
+
+
     class Config:
         from_attributes = True
 
@@ -73,3 +88,30 @@ class Token(BaseModel):
 # -----------------------------
 class TokenData(BaseModel):
     user_id: Optional[int] = None
+
+
+# -----------------------------
+# PROFILE UPDATE
+# -----------------------------
+class ProfileUpdate(BaseModel):
+    name: Optional[str]
+    email: Optional[EmailStr]
+    phone: Optional[str]
+    city: Optional[str]
+    gender: Optional[Gender]
+    profession: Optional[str]
+    age: Optional[int]
+    salary: Optional[float] = Field(
+    None, ge=0
+    )
+
+# -----------------------------
+# CHANGE PASSWORD
+# -----------------------------
+class ChangePassword(BaseModel):
+    old_password: str
+    new_password: str = Field(
+        ...,
+        min_length=6,
+        description="Minimum 6 characters"
+    )

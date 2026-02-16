@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from app.dependencies import get_current_user, get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, Token
+from app.schemas.user import UserCreate, Token, ProfileUpdate, ChangePassword
 from app.core.config import SECRET_KEY, ALGORITHM
 
 
@@ -102,5 +102,74 @@ def read_me(current_user: User = Depends(get_current_user)):
         "name": current_user.name,
         "email": current_user.email,
         "risk_profile": current_user.risk_profile,
-        "kyc_status": current_user.kyc_status
+        "kyc_status": current_user.kyc_status,
+        "phone": current_user.phone,
+        "city": current_user.city,
+        "gender": current_user.gender,
+        "profession": current_user.profession,
+        "age": current_user.age,
+        "salary": current_user.salary
+        
+    }
+@router.put("/update-profile")
+def update_profile(
+    data: ProfileUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+
+    try:
+
+        # Convert request → dict
+        update_data = data.dict(exclude_unset=True)
+
+        # Update only provided fields
+        for field, value in update_data.items():
+            setattr(current_user, field, value)
+
+        db.commit()
+        db.refresh(current_user)
+
+        return {
+            "message": "Profile updated successfully"
+        }
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+# -----------------------------
+# CHANGE PASSWORD
+# -----------------------------
+@router.put("/change-password")
+def change_password(
+    data: ChangePassword,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+
+    # 1️⃣ Verify old password
+    if not verify_password(
+        data.old_password,
+        current_user.password
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Old password is incorrect"
+        )
+
+    # 2️⃣ Hash new password
+    hashed_password = get_password_hash(
+        data.new_password
+    )
+
+    # 3️⃣ Update DB
+    current_user.password = hashed_password
+
+    db.commit()
+
+    return {
+        "message": "Password changed successfully"
     }

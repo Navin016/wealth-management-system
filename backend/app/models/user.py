@@ -5,6 +5,7 @@ import enum
 from decimal import Decimal
 
 
+# ---------------- ENUMS ----------------
 
 class RiskProfile(enum.Enum):
     conservative = "conservative"
@@ -12,12 +13,20 @@ class RiskProfile(enum.Enum):
     aggressive = "aggressive"
 
 
-
 class KYCStatus(enum.Enum):
     unverified = "unverified"
     verified = "verified"
     rejected = "rejected"
 
+
+# NEW ENUM → Gender
+class Gender(enum.Enum):
+    male = "male"
+    female = "female"
+    other = "other"
+
+
+# ---------------- USER MODEL ----------------
 
 class User(Base):
     __tablename__ = "users"
@@ -47,8 +56,27 @@ class User(Base):
         server_default=func.now(),
         nullable=False
     )
-    wallet_balance = Column(Numeric, default=Decimal("0.00"), nullable=False)
-    
 
+    wallet_balance = Column(
+        Numeric,
+        default=Decimal("0.00"),
+        nullable=False
+    )
 
-    
+    # --------------------------------------------------
+    # NEW PROFILE FIELDS (ADDED — NOTHING REMOVED)
+    # --------------------------------------------------
+
+    phone = Column(String(20))
+
+    city = Column(String(100))
+
+    gender = Column(
+        Enum(Gender, name="gender_enum")
+    )
+
+    profession = Column(String(100))
+
+    age = Column(Integer)
+
+    salary = Column(Numeric(18, 2))

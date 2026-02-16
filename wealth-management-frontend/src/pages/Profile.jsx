@@ -21,6 +21,10 @@ function Profile() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
+  /* Success UI state */
+  const [successState, setSuccessState] =
+    useState(false);
+
   /* ================= FETCH PROFILE ================= */
 
   useEffect(() => {
@@ -34,7 +38,8 @@ function Profile() {
           phone: res.data.phone || "",
           city: res.data.city || "",
           gender: res.data.gender || "",
-          profession: res.data.profession || "",
+          profession:
+            res.data.profession || "",
           age: res.data.age || "",
           salary: res.data.salary || ""
         });
@@ -67,9 +72,23 @@ function Profile() {
     setError("");
 
     try {
-      await API.put("/auth/update-profile", form);
+      await API.put(
+        "/auth/update-profile",
+        form
+      );
 
-      setMessage("Profile updated successfully ✅");
+      setMessage(
+        "Profile updated successfully ✅"
+      );
+
+      /* Trigger glow + green button */
+      setSuccessState(true);
+
+      /* Auto reset UI + banner */
+      setTimeout(() => {
+        setSuccessState(false);
+        setMessage("");
+      }, 2500);
 
     } catch {
       setError("Update failed");
@@ -85,7 +104,13 @@ function Profile() {
   /* ================= UI ================= */
 
   return (
-    <div className="profile-section">
+    <div
+      className={`profile-section ${
+        successState
+          ? "success-glow"
+          : ""
+      }`}
+    >
 
       <h2>Edit Profile</h2>
 
@@ -159,9 +184,7 @@ function Profile() {
               value={form.gender}
               onChange={handleChange}
             >
-              <option value="">
-                Select
-              </option>
+              <option value="">Select</option>
               <option value="male">
                 Male
               </option>
@@ -208,9 +231,14 @@ function Profile() {
 
         </div>
 
+        {/* Save Button */}
         <button
           type="submit"
-          className="save-btn"
+          className={`save-btn ${
+            successState
+              ? "success"
+              : ""
+          }`}
         >
           Save Changes
         </button>

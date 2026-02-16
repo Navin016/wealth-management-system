@@ -1,64 +1,125 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
+import { Eye, EyeOff } from "lucide-react";
 import "./Auth.css";
 
 function Login() {
+
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     try {
       const formData = new URLSearchParams();
       formData.append("username", email);
       formData.append("password", password);
 
-      const res = await API.post("/auth/login", formData, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      });
+      const res = await API.post(
+        "/auth/login",
+        formData,
+        {
+          headers: {
+            "Content-Type":
+              "application/x-www-form-urlencoded",
+          },
+        }
+      );
 
-       localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem(
+        "access_token",
+        res.data.access_token
+      );
 
-      // ✅ redirect to home
-     
       navigate("/dashboard");
+
     } catch (err) {
-      alert(err.response?.data?.detail || "Login failed");
+      setError(
+        err.response?.data?.detail ||
+        "Login failed"
+      );
     }
   };
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
-      <h2>Login</h2>
+    <div className="auth-wrapper">
 
-      <input
-        type="email"
-        placeholder="Email address"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
+      <div className="auth-card">
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+        <h2>Login</h2>
 
-      <button type="submit">Login</button>
+        {error && (
+          <div className="error-banner">
+            {error}
+          </div>
+        )}
 
-      <p className="form-footer">
-        Don’t have an account? <a href="/register">Register</a>
-      </p>
-    </form>
+        <form onSubmit={handleSubmit}>
+
+          {/* EMAIL */}
+          <div className="floating-group">
+            <input
+              type="email"
+              placeholder=" "
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              required
+            />
+            <label>Email Address</label>
+          </div>
+
+          {/* PASSWORD */}
+          <div className="floating-group password-group">
+
+            <input
+              type={
+                show ? "text" : "password"
+              }
+              placeholder=" "
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+              required
+            />
+
+            <label>Password</label>
+
+            <button
+              type="button"
+              className="eye-btn"
+              onClick={() =>
+                setShow(!show)
+              }
+            >
+              {show
+                ? <EyeOff size={18}/>
+                : <Eye size={18}/>}
+            </button>
+
+          </div>
+
+          <button
+            type="submit"
+            className="auth-btn"
+          >
+            Login
+          </button>
+
+        </form>
+
+      </div>
+    </div>
   );
 }
 
