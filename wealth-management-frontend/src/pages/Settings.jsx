@@ -1,23 +1,29 @@
-import "./Settings.css";
-
 function Settings() {
   return (
-    <div className="page">
-      <h1>Settings</h1>
+    <div className="settings-section">
 
-      <form>
-        <label>
-          Name
-          <input type="text" placeholder="Your Name" />
-        </label>
+      <h2>Account Settings</h2>
 
-        <label>
-          Email
-          <input type="email" placeholder="Email" />
-        </label>
+      <div className="settings-card">
 
-        <button type="submit">Save</button>
-      </form>
+        <button>
+          Change Password
+        </button>
+
+        <button>
+          Enable 2FA
+        </button>
+
+        <button>
+          Notification Preferences
+        </button>
+
+        <button>
+          Logout
+        </button>
+
+      </div>
+
     </div>
   );
 }

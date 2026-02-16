@@ -15,7 +15,7 @@ import Goals from "./pages/Goals";
 import Transactions from "./pages/Transactions";
 import Analytics from "./pages/Analytics";
 import Reports from "./pages/Reports";
-import Settings from "./pages/Settings";
+import Account from "./pages/Account";
 
 function App() {
   return (
@@ -126,10 +126,10 @@ function App() {
       />
 
       <Route
-        path="/settings"
+        path="/account"
         element={
           <PrivateLayout>
-            <Settings />
+            <Account />
           </PrivateLayout>
         }
       />

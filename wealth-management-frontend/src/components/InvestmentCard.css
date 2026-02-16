@@ -1,18 +1,19 @@
+/* ================= CARD ================= */
+
 .investment-card {
   background: #020617;
   border: 1px solid #1eea25;
   padding: 0.9rem 1rem;
   border-radius: 18px;
   box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: box-shadow 0.15s ease;
   border-top: 2px solid #10b981;
   position: relative;
   overflow: hidden;
 
   display: flex;
   flex-direction: column;
-
-  font-size: 1.05rem; /* 👈 global font boost */
+  font-size: 1.05rem;
 }
 
 .investment-card::before {
@@ -24,11 +25,6 @@
   height: 2px;
   border-radius: 999px;
   background: linear-gradient(90deg, #10b981, #3b82f6);
-}
-
-.investment-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
 /* ================= HEADER ================= */
@@ -63,7 +59,6 @@
   font-size: 1.3rem;
   font-weight: 700;
   color: #22c55e;
-  text-align: right;
 }
 
 /* ================= METRICS ================= */
@@ -77,8 +72,6 @@
 .metric .label {
   font-size: 0.75rem;
   color: #94a3b8;
-  margin-bottom: 0.15rem;
-  letter-spacing: 0.04em;
 }
 
 .metric .value {
@@ -87,24 +80,15 @@
   color: #e5e7eb;
 }
 
-.metric.price .value {
-  color: #60a5fa;
-}
-
-/* ================= GAIN / LOSS ================= */
+/* ================= GAIN LOSS ================= */
 
 .gain-loss {
   margin-top: 0.75rem;
   padding: 0.5rem 0.6rem;
   border-radius: 10px;
-
   display: flex;
-  justify-content: flex-start; /* 👈 left aligned */
-  align-items: center;
   gap: 8px;
-
   font-weight: 700;
-  font-size: 1rem;
 }
 
 .gain-loss.profit {
@@ -117,29 +101,116 @@
   color: #ef4444;
 }
 
-.gain-loss .percent {
+/* ================= SIMULATION ================= */
+
+.simulation-box {
+  margin-top: 0.8rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed #1e293b;
+  animation: fadeSlide 0.25s ease;
+}
+
+/* Slider Base */
+.simulation-slider {
+  width: 65%;
+  margin-left: 0;
+  display: block;
+  cursor: pointer;
+  background: transparent;
+  -webkit-appearance: none;
+}
+
+/* Track Progress */
+.simulation-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #3b82f6 var(--progress, 0%),
+    #1e293b var(--progress, 0%)
+  );
+}
+
+/* Thumb */
+.simulation-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: #3b82f6;
+  border: 2px solid #93c5fd;
+  margin-top: -5px;
+}
+
+/* Firefox */
+.simulation-slider::-moz-range-track {
+  height: 8px;
+  background: #1e293b;
+}
+
+.simulation-slider::-moz-range-progress {
+  height: 8px;
+  background: #3b82f6;
+}
+
+.simulation-slider::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: #3b82f6;
+  border: 2px solid #93c5fd;
+}
+
+/* Text */
+.simulation-header {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.simulation-amount,
+.simulation-result {
   font-size: 0.85rem;
-  font-weight: 500;
-  opacity: 0.9;
+  text-align: left;
+  margin-top: 4px;
 }
 
-.gain-loss .amount {
-  font-size: 1.05rem;
+.simulation-result.profit { color: #22c55e; }
+.simulation-result.loss { color: #ef4444; }
+
+/* Animation */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.simulation-summary {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #cbd5f5;
+  line-height: 1.4;
 }
 
-/* ================= RESPONSIVE ================= */
+.simulation-summary strong {
+  color: #e5e7eb;
+  font-weight: 600;
+}
+/* Return % beside value */
 
-@media (max-width: 480px) {
-  .investment-card {
-    padding: 0.75rem;
-    font-size: 1rem;
-  }
+.return-rate {
+  margin-left: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
 
-  .investment-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.return-rate.profit {
+  color: #22c55e;
+}
 
-  .current-value {
-    font-size: 1.15rem;
-  }
+.return-rate.loss {
+  color: #ef4444;
 }

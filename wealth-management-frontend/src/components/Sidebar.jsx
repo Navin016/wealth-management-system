@@ -49,7 +49,7 @@ function Sidebar() {
         <NavLink to="/transactions">📄 {!collapsed && "Transactions"}</NavLink>
         <NavLink to="/analytics">📈 {!collapsed && "Analytics"}</NavLink>
         <NavLink to="/reports">🧾 {!collapsed && "Reports"}</NavLink>
-        <NavLink to="/settings">⚙️ {!collapsed && "Settings"}</NavLink>
+        <NavLink to="/account">⚙️ {!collapsed && "Account"}</NavLink>
       </nav>
 
       {/* LOGOUT */}

@@ -277,7 +277,7 @@ function Transactions() {
                   <span className="tx-amount">
                     {tx.type === "contribute" ||
                     tx.type === "withdraw"
-                      ? `₹${tx.amount?.toFixed(2)}`
+                      ? `₹${tx.price?.toFixed(2)}`
                       : `₹${(
                           tx.price * tx.quantity
                         ).toFixed(2)}`}

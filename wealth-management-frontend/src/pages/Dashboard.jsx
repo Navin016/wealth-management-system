@@ -18,6 +18,12 @@ function Dashboard() {
   const [recentTransactions, setRecentTransactions] = useState([]);
   const navigate = useNavigate();
 
+  // ---------------- NAVIGATION HANDLERS ----------------
+  const handleGoToGoals = () => navigate("/goals");
+  const handleGoToInvestments = () => navigate("/investments");
+  const handleGoToTransactions = () => navigate("/transactions");
+  const handleGoToRecords = () => navigate("/reports");
+
   // PROGRESS CALCULATION (same as Goals)
   const calculateProgress = (goal) => {
     if (
@@ -42,7 +48,7 @@ function Dashboard() {
     return Math.min((investedAmount / goal.target_amount) * 100, 100);
   };
 
-  // FETCH USER + GOALS + INVESTMENTS + RECENT TXNS
+  // FETCH DATA
   useEffect(() => {
     const loadDashboard = async () => {
       try {
@@ -89,7 +95,6 @@ function Dashboard() {
           return sum + c;
         }, 0);
 
-        // optional: recent transactions (adjust endpoint/fields)
         let txns = [];
         try {
           const txRes = await API.get("/transactions/recent");
@@ -118,39 +123,46 @@ function Dashboard() {
     loadDashboard();
   }, []);
 
-  const handleGoToRecords = () => {
-    navigate("/reports");
-  };
-
   return (
     <div className="dashboard-page">
       <h1>📊 Dashboard Overview</h1>
 
-      {/* 4 MAIN CONTAINERS (2x2 GRID) */}
       <div className="dashboard-grid-4">
-        {/* CARD 1: Goals Overview */}
-        <div className="dashboard-section-card">
+        {/* ---------------- GOALS ---------------- */}
+        <div
+          className="dashboard-section-card"
+          onClick={handleGoToGoals}
+          style={{ cursor: "pointer" }}
+        >
           <div className="dashboard-section-header">
             <h2>Goals Overview</h2>
             <span className="tag">Planning</span>
           </div>
+
           <div className="dashboard-cards-single">
             <div className="dash-card">
               <h3>Total Goals</h3>
               <p>{summary.totalGoals}</p>
             </div>
+
             <div className="dash-card">
               <h3>Active</h3>
               <p>{summary.activeGoals}</p>
             </div>
+
             <div className="dash-card">
               <h3>Completed</h3>
               <p>{summary.completedGoals}</p>
             </div>
+
             <div className="dash-card">
               <h3>Total Target</h3>
-              <p>₹ {summary.totalTargetAmount.toLocaleString("en-IN")}</p>
+              <p>
+                ₹{" "}
+                {summary.totalTargetAmount.toLocaleString("en-IN")}
+              </p>
             </div>
+
             <div className="dash-card">
               <h3>Average Progress</h3>
               <p>{summary.averageProgress.toFixed(1)}%</p>
@@ -158,24 +170,38 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* CARD 2: Investments Overview */}
-        <div className="dashboard-section-card">
+        {/* ---------------- INVESTMENTS ---------------- */}
+        <div
+          className="dashboard-section-card"
+          onClick={handleGoToInvestments}
+          style={{ cursor: "pointer" }}
+        >
           <div className="dashboard-section-header">
             <h2>Investments</h2>
             <span className="tag">Portfolio</span>
           </div>
+
           <div className="dashboard-cards-single">
             <div className="dash-card investment">
               <h3>Portfolio Value</h3>
-              <p>₹ {summary.totalInvestmentsValue.toLocaleString("en-IN")}</p>
+              <p>
+                ₹{" "}
+                {summary.totalInvestmentsValue.toLocaleString(
+                  "en-IN"
+                )}
+              </p>
             </div>
+
             <div className="dash-card investment">
               <h3>Invested (Cost Basis)</h3>
               <p>
                 ₹{" "}
-                {summary.totalInvestmentsCostBasis.toLocaleString("en-IN")}
+                {summary.totalInvestmentsCostBasis.toLocaleString(
+                  "en-IN"
+                )}
               </p>
             </div>
+
             <div className="dash-card investment">
               <h3>Holdings</h3>
               <p>{summary.holdingsCount}</p>
@@ -183,73 +209,87 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* CARD 3: Reports / Records */}
+        {/* ---------------- REPORTS ---------------- */}
         <div className="dashboard-section-card">
           <div className="dashboard-section-header">
             <h2>Reports</h2>
             <span className="tag">Insights</span>
           </div>
+
           <div className="dashboard-cards-single">
-            <div className="report-card" onClick={handleGoToRecords}>
+            <div
+              className="report-card"
+              onClick={handleGoToRecords}
+              style={{ cursor: "pointer" }}
+            >
               <div className="report-card-main">
                 <h3>Records & Reports</h3>
-                <p>Open detailed income, expense and investment records.</p>
+                <p>
+                  Open detailed income, expense and investment
+                  records.
+                </p>
               </div>
-              <span className="report-cta">Go to Records →</span>
+
+              <span className="report-cta">
+                Go to Records →
+              </span>
             </div>
           </div>
         </div>
 
-        {/* CARD 4: Recent Transactions */}
-        <div className="dashboard-section-card">
+        {/* ---------------- TRANSACTIONS ---------------- */}
+        <div
+          className="dashboard-section-card"
+          onClick={handleGoToTransactions}
+          style={{ cursor: "pointer" }}
+        >
           <div className="dashboard-section-header">
             <h2>Recent Transactions</h2>
             <span className="tag">Activity</span>
           </div>
+
           <div className="transactions-card">
             {recentTransactions.length === 0 && (
-              <p className="transactions-empty">No recent transactions.</p>
+              <p className="transactions-empty">
+                No recent transactions.
+              </p>
             )}
+
             {recentTransactions.length > 0 && (
-             <ul className="transactions-list">
+              <ul className="transactions-list">
+                {recentTransactions.map((tx) => (
+                  <li
+                    key={tx.id}
+                    className="transaction-row"
+                  >
+                    <div className="transaction-main">
+                      <span className="transaction-title">
+                        {tx.symbol} •{" "}
+                        {tx.type.toUpperCase()}
+                      </span>
 
-  {recentTransactions.map((tx) => (
+                      <span className="transaction-amount">
+                        ₹{" "}
+                        {tx.amount.toLocaleString(
+                          "en-IN"
+                        )}
+                      </span>
+                    </div>
 
-    <li key={tx.id} className="transaction-row">
-
-      <div className="transaction-main">
-
-        <span className="transaction-title">
-          {tx.symbol} • {tx.type.toUpperCase()}
-        </span>
-
-        <span className="transaction-amount">
-          ₹ {tx.amount.toLocaleString("en-IN")}
-        </span>
-
-      </div>
-
-      <div className="transaction-meta">
-
-        <span className="transaction-date">
-          {new Date(tx.date).toLocaleDateString(
-            "en-IN",
-            {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            }
-          )}
-        </span>
-
-      </div>
-
-    </li>
-
-  ))}
-
-</ul>
-
+                    <div className="transaction-meta">
+                      <span className="transaction-date">
+                        {new Date(
+                          tx.date
+                        ).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
         </div>

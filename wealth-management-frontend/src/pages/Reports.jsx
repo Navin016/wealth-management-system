@@ -78,17 +78,17 @@ function Reports() {
 
         <div className="card">
           <p>Total Invested</p>
-          <h3>${data.total_invested.toFixed(2)}</h3>
+          <h3>₹{data.total_invested.toFixed(2)}</h3>
         </div>
 
         <div className="card">
           <p>Current Value</p>
-          <h3>${data.current_value.toFixed(2)}</h3>
+          <h3>₹{data.current_value.toFixed(2)}</h3>
         </div>
 
         <div className="card">
           <p>Profit / Loss</p>
-          <h3>${data.profit_loss.toFixed(2)}</h3>
+          <h3>₹{data.profit_loss.toFixed(2)}</h3>
         </div>
 
         <div className="card highlight">
@@ -166,12 +166,12 @@ function Reports() {
 
               <p>
                 Target:
-                ${goal.target_amount.toFixed(2)}
+                ₹{goal.target_amount.toFixed(2)}
               </p>
 
               <p>
                 Saved:
-                ${goal.current_saved.toFixed(2)}
+                ₹{goal.current_saved.toFixed(2)}
               </p>
 
               {/* PROGRESS */}
@@ -238,14 +238,14 @@ function Reports() {
           <p>
             Price
             <span>
-              ${txn.price.toFixed(2)}
+              ₹{txn.price.toFixed(2)}
             </span>
           </p>
 
           <p>
             Fees
             <span>
-              ${txn.fees.toFixed(2)}
+              ₹{txn.fees.toFixed(2)}
             </span>
           </p>
 

@@ -48,6 +48,17 @@ def get_user_investments(
         # 🔹 Attach response-only fields
         inv.gain_loss = pnl
         inv.gain_loss_percent = pnl_percent
+        try:
+            one_year_return = PriceService.get_one_year_return(
+            inv.symbol
+            )
+        except Exception:
+            one_year_return = 0
+ 
+        inv.one_year_return_rate = Decimal(
+            one_year_return or 0
+            )
+
 
     return investments
 

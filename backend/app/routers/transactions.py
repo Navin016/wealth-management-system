@@ -187,7 +187,7 @@ def contribute(
             user_id=user.id,
             symbol="WALLET",   # Internal wallet symbol
             type=TransactionType.contribution,
-            quantity=None,
+            quantity=1,
             price=data.amount,
             fees=Decimal("0"),
             asset_type=AssetType.cash.value  # 🔥 FIX
@@ -220,7 +220,7 @@ def withdraw(
             user_id=user.id,
             symbol="WALLET",
             type=TransactionType.withdrawal,
-            quantity=None,
+            quantity=1,
             price=data.amount,
             fees=Decimal("0"),
             asset_type=AssetType.cash.value  # 🔥 FIX
@@ -265,7 +265,7 @@ def get_recent_transactions(
         db.query(Transaction)
         .filter(Transaction.user_id == current_user.id)
         .order_by(Transaction.created_at.desc())
-        .limit(5)
+        .limit(3)
         .all()
     )
 

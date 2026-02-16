@@ -77,7 +77,7 @@ def get_report_summary(
     transactions = db.query(Transaction).filter(
         Transaction.user_id == current_user.id
     ).order_by(
-        Transaction.executed_at.desc()
+        Transaction.created_at.desc()
     ).limit(5).all()
 
     total_invested = sum(

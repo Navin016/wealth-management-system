@@ -38,7 +38,10 @@ const CustomTooltip = ({ active, payload, total }) => {
       <strong style={{ display: "block", marginBottom: 4 }}>
         {name}
       </strong>
+
+      {/* ✅ RUPEE SYMBOL */}
       <div>₹ {value.toLocaleString("en-IN")}</div>
+
       <div style={{ color: "#94a3b8" }}>{percent}%</div>
     </div>
   );

@@ -1,0 +1,58 @@
+.account-page {
+  padding: 24px;
+  color: #e5e7eb;
+}
+
+/* Tabs */
+
+.account-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.account-tabs button {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  background: #020617;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.account-tabs button.active {
+  background: #3b82f6;
+}
+
+/* Content Card */
+
+.account-content > div {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+/* Profile */
+
+.profile-card p {
+  margin: 6px 0;
+}
+
+/* Settings */
+
+.settings-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-card button {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #1e293b;
+  color: #e5e7eb;
+  cursor: pointer;
+}

@@ -5,29 +5,48 @@ import InvestmentPieChart from "../components/InvestmentPieChart";
 import "./Investments.css";
 
 function Investments() {
-  const [investments, setInvestments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [totalValue, setTotalValue] = useState(0);
+  const [investments, setInvestments] =
+    useState([]);
 
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] =
+    useState(true);
+
+  const [totalValue, setTotalValue] =
+    useState(0);
+
+  const [message, setMessage] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
+
+  /* 🔥 NEW — Expanded Card Control */
+  const [expandedId, setExpandedId] =
+    useState(null);
 
   // ---------------- FETCH INVESTMENTS ----------------
   const fetchInvestments = async () => {
     try {
-      const res = await API.get("/investments/");
+      const res = await API.get(
+        "/investments/"
+      );
+
       const data = res.data || [];
 
       setInvestments(data);
 
       const total = data.reduce(
-        (sum, inv) => sum + Number(inv.current_value || 0),
+        (sum, inv) =>
+          sum +
+          Number(inv.current_value || 0),
         0
       );
 
       setTotalValue(total);
     } catch {
-      setError("Failed to load investments");
+      setError(
+        "Failed to load investments"
+      );
     } finally {
       setLoading(false);
     }
@@ -35,16 +54,14 @@ function Investments() {
 
   // ---------------- FETCH ON LOAD + AUTO FETCH ----------------
   useEffect(() => {
-    // Initial fetch
     fetchInvestments();
 
-    // Auto fetch every 10 minutes (600000 ms)
     const interval = setInterval(() => {
       fetchInvestments();
     }, 600000);
 
-    // Cleanup
-    return () => clearInterval(interval);
+    return () =>
+      clearInterval(interval);
   }, []);
 
   // ---------------- AUTO HIDE SUCCESS ----------------
@@ -54,26 +71,27 @@ function Investments() {
         setMessage("");
       }, 2000);
 
-      return () => clearTimeout(timer);
+      return () =>
+        clearTimeout(timer);
     }
   }, [message]);
 
-  // ---------------- REFRESH PRICES (MANUAL) ----------------
+  // ---------------- REFRESH PRICES ----------------
   const updatePrices = async () => {
     setError("");
     setMessage("");
 
     try {
-      const res = await API.post("/investments/refresh/");
+      const res = await API.post(
+        "/investments/refresh/"
+      );
 
       setMessage(
         res.data.message ||
-        "Prices refreshed successfully ✅"
+          "Prices refreshed successfully ✅"
       );
 
-      // Refetch updated prices immediately
       await fetchInvestments();
-
     } catch {
       setError(
         "Failed to update prices. Server error."
@@ -100,15 +118,21 @@ function Investments() {
         <div className="portfolio-left">
           <h1>📊 Investments Overview</h1>
           <p className="subtitle">
-            Track allocation, performance & growth
+            Track allocation,
+            performance & growth
           </p>
         </div>
 
         <div className="portfolio-right">
 
           <div className="portfolio-total">
-            ₹ {totalValue.toLocaleString("en-IN")}
-            <span>Total Portfolio Value</span>
+            ₹{" "}
+            {totalValue.toLocaleString(
+              "en-IN"
+            )}
+            <span>
+              Total Portfolio Value
+            </span>
           </div>
 
           <button
@@ -140,7 +164,10 @@ function Investments() {
         <div className="charts-section">
 
           <div className="chart-card">
-            <h3>Symbol Allocation</h3>
+            <h3>
+              Symbol Allocation
+            </h3>
+
             <InvestmentPieChart
               investments={investments}
             />
@@ -157,25 +184,37 @@ function Investments() {
             </div>
 
             <div className="stat">
-              <span>Highest Holding</span>
+              <span>
+                Highest Holding
+              </span>
               <strong>
                 ₹{" "}
                 {Math.max(
-                  ...investments.map(i =>
-                    Number(i.current_value || 0)
+                  ...investments.map(
+                    (i) =>
+                      Number(
+                        i.current_value ||
+                          0
+                      )
                   )
-                ).toLocaleString("en-IN")}
+                ).toLocaleString(
+                  "en-IN"
+                )}
               </strong>
             </div>
 
             <div className="stat">
-              <span>Avg Investment</span>
+              <span>
+                Avg Investment
+              </span>
               <strong>
                 ₹{" "}
                 {(
                   totalValue /
                   investments.length
-                ).toLocaleString("en-IN")}
+                ).toLocaleString(
+                  "en-IN"
+                )}
               </strong>
             </div>
 
@@ -186,22 +225,39 @@ function Investments() {
       {/* INVESTMENT LIST */}
       {investments.length === 0 ? (
         <div className="empty-state">
-          <h3>No investments found</h3>
+          <h3>
+            No investments found
+          </h3>
           <p>
-            Add transactions to start tracking your portfolio
+            Add transactions to
+            start tracking your
+            portfolio
           </p>
         </div>
       ) : (
         <div className="investments-list">
-          {investments.map(inv => (
+          {investments.map((inv) => (
             <InvestmentCard
               key={inv.id}
               investment={inv}
+
+              /* 🔥 Controlled Expand */
+              expanded={
+                expandedId === inv.id
+              }
+
+              onToggle={() =>
+                setExpandedId(
+                  (prev) =>
+                    prev === inv.id
+                      ? null
+                      : inv.id
+                )
+              }
             />
           ))}
         </div>
       )}
-
     </div>
   );
 }
