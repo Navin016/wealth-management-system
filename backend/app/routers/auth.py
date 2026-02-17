@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from jose import jwt
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordRequestForm
+from app.services.risk_service import calculate_risk_score, get_risk_profile
 
 from app.dependencies import get_current_user, get_db
 from app.models.user import User
@@ -173,3 +174,19 @@ def change_password(
     return {
         "message": "Password changed successfully"
     }
+from app.services.risk_service import calculate_risk_score
+
+
+@router.get("/risk-profile")
+def risk_profile(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+
+    result = calculate_risk_score(
+        db,
+        current_user.id
+    )
+
+    return result
+

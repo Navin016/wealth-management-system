@@ -1,58 +1,149 @@
+/* ================= PAGE ================= */
+
 .account-page {
   padding: 24px;
-  color: #e5e7eb;
+  color: #38bdf8;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-/* Tabs */
+/* ================= TABS ================= */
 
 .account-tabs {
   display: flex;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
+
+/* TAB BUTTON */
 
 .account-tabs button {
-  padding: 8px 16px;
-  border-radius: 10px;
-  border: 1px solid #1e293b;
-  background: #020617;
+  padding: 8px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+
+  background: rgba(2, 6, 23, 0.65);
   color: #e5e7eb;
+
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.25s;
+
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 16px rgba(8, 47, 73, 0.35);
 }
+
+/* HOVER GLOW */
+
+.account-tabs button:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow:
+    0 0 10px rgba(34, 211, 238, 0.35),
+    0 10px 22px rgba(8, 47, 73, 0.5);
+}
+
+/* ACTIVE TAB */
 
 .account-tabs button.active {
-  background: #3b82f6;
+  background: linear-gradient(
+    135deg,
+    #22d3ee,
+    #3b82f6
+  );
+  color: #020617;
+  font-weight: 600;
+
+  border-color: transparent;
+
+  box-shadow:
+    0 0 14px rgba(34, 211, 238, 0.5),
+    0 12px 26px rgba(8, 47, 73, 0.6);
 }
 
-/* Content Card */
+/* ================= CONTENT CARD ================= */
 
 .account-content > div {
-  background: #020617;
-  border: 1px solid #1e293b;
-  padding: 16px;
-  border-radius: 16px;
+  background: rgba(2, 6, 23, 0.65);
+  border: 1px solid rgba(34, 211, 238, 0.25);
+
+  padding: 18px;
+  border-radius: 18px;
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 10px 26px rgba(8, 47, 73, 0.45);
+
+  transition: 0.25s;
 }
 
-/* Profile */
+/* HOVER GLOW */
+
+.account-content > div:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow:
+    0 0 18px rgba(34, 211, 238, 0.35),
+    0 14px 32px rgba(8, 47, 73, 0.6);
+}
+
+/* ================= PROFILE ================= */
 
 .profile-card p {
   margin: 6px 0;
+  font-size: 14px;
+  color: #cbd5f5;
 }
 
-/* Settings */
+/* ================= SETTINGS ================= */
 
 .settings-card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
+/* SETTINGS BUTTON */
+
 .settings-card button {
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-  background: #1e293b;
+  padding: 10px 12px;
+  border-radius: 10px;
+
+  border: 1px solid rgba(34, 211, 238, 0.25);
+
+  background: rgba(2, 6, 23, 0.7);
   color: #e5e7eb;
+
   cursor: pointer;
+  transition: 0.25s;
+
+  backdrop-filter: blur(12px);
+}
+
+/* HOVER */
+
+.settings-card button:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  color: #22d3ee;
+
+  box-shadow:
+    0 0 10px rgba(34, 211, 238, 0.35),
+    0 8px 18px rgba(8, 47, 73, 0.5);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .account-page {
+    padding: 16px;
+  }
+
+  .account-tabs {
+    flex-wrap: wrap;
+  }
+
+  .account-tabs button {
+    flex: 1;
+    text-align: center;
+  }
 }

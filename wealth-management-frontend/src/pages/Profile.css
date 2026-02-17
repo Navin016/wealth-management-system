@@ -1,6 +1,6 @@
 .profile-section {
   color:#38bdf8;
-  width: 65%;
+  width: 75%;
   padding: 18px;
   border-radius: 16px;
   border: 1px solid #1e293b;
@@ -90,4 +90,112 @@
   border-radius: 8px;
   margin-bottom: 10px;
   color: #ef4444;
+}
+/* ================= RISK BANNER ================= */
+
+.profile-risk-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin: 14px 0 18px;
+  padding: 14px 18px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+
+  background: rgba(2, 6, 23, 0.65);
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 8px 20px rgba(8, 47, 73, 0.45);
+
+  transition: 0.25s;
+}
+
+/* Hover glow */
+
+.profile-risk-banner:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow:
+    0 0 16px rgba(34, 211, 238, 0.35),
+    0 12px 28px rgba(8, 47, 73, 0.6);
+}
+
+/* LEFT */
+
+.profile-risk-title {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.profile-risk-label {
+  margin: 3px 0 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-left: 18px;
+  margin-bottom: 15px;
+}
+
+/* Profile colors */
+
+.profile-risk-label.conservative {
+  color: #38bdf8;
+}
+
+.profile-risk-label.moderate {
+  color: #facc15;
+}
+
+.profile-risk-label.aggressive {
+  color: #fb7185;
+}
+
+/* RIGHT */
+
+.profile-risk-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* Score */
+
+.profile-risk-score {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #22d3ee;
+  margin-right: 75px;
+}
+
+.profile-risk-score span {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-left: 2px;
+}
+
+/* Meter */
+
+.profile-risk-meter {
+  width: 120px;
+  height: 6px;
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.profile-risk-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #22d3ee,
+    #38bdf8,
+    #818cf8
+  );
+  border-radius: 999px;
+  transition: width 0.4s ease;
 }

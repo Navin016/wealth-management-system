@@ -47,7 +47,6 @@ function Sidebar() {
         <NavLink to="/investments">💰 {!collapsed && "Investments"}</NavLink>
         <NavLink to="/goals">🎯 {!collapsed && "Goals"}</NavLink>
         <NavLink to="/transactions">📄 {!collapsed && "Transactions"}</NavLink>
-        <NavLink to="/analytics">📈 {!collapsed && "Analytics"}</NavLink>
         <NavLink to="/reports">🧾 {!collapsed && "Reports"}</NavLink>
         <NavLink to="/account">⚙️ {!collapsed && "Account"}</NavLink>
       </nav>

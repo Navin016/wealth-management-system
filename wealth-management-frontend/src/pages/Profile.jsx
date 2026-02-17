@@ -25,6 +25,9 @@ function Profile() {
   const [successState, setSuccessState] =
     useState(false);
 
+  /* ✅ Risk state */
+  const [risk, setRisk] = useState(null);
+
   /* ================= FETCH PROFILE ================= */
 
   useEffect(() => {
@@ -43,6 +46,13 @@ function Profile() {
           age: res.data.age || "",
           salary: res.data.salary || ""
         });
+
+        /* ===== FETCH RISK PROFILE ===== */
+        const riskRes = await API.get(
+          "/auth/risk-profile"
+        );
+
+        setRisk(riskRes.data);
 
       } catch {
         setError("Failed to load profile");
@@ -113,6 +123,48 @@ function Profile() {
     >
 
       <h2>Edit Profile</h2>
+
+      {/* ===== RISK PROFILE BANNER ===== */}
+
+      {risk && (
+        <div className="profile-risk-banner">
+
+          <div className="profile-risk-left">
+
+            <p className="profile-risk-title">
+              Risk Profile
+            </p>
+
+            <h3
+              className={`profile-risk-label ${
+                risk.risk_profile
+              }`}
+            >
+              {risk.risk_profile.toUpperCase()}
+            </h3>
+
+          </div>
+
+          <div className="profile-risk-right">
+
+            <div className="profile-risk-score">
+              {risk.risk_score}
+              <span>/100</span>
+            </div>
+
+            <div className="profile-risk-meter">
+              <div
+                className="profile-risk-fill"
+                style={{
+                  width: `${risk.risk_score}%`
+                }}
+              />
+            </div>
+
+          </div>
+
+        </div>
+      )}
 
       {message && (
         <div className="success">
