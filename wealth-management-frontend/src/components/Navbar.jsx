@@ -16,9 +16,7 @@ function Navbar() {
           Home
         </NavLink>
 
-        <NavLink to="/contact" className="nav-link">
-          Contact
-        </NavLink>
+       
 
         <NavLink to="/login" className="nav-link">
           Login
